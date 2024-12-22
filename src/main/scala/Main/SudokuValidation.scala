@@ -60,6 +60,8 @@ object SudokuValidation {
   }
 
   def isCompleteSudoku(grid: List[List[Option[Int]]]): Boolean = {
+    if grid.isEmpty then return false
+
     val noMissing =
       List(
         getSudokuRows(grid),

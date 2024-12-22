@@ -42,6 +42,8 @@ class SudokuValidationTest extends AnyFunSuite {
 
     // last row has one missing:
     assert(!isCompleteSudoku(getGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1")))
+
+    assert(!isCompleteSudoku(List()))
   }
 
   test("Sudoku has errors") {
