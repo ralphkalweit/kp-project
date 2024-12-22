@@ -24,7 +24,7 @@ class BacktrackingTest extends AnyFunSuite {
     val solution = backtracking(List(getGrid(sudokuString)))
 
     assert(solution.nonEmpty)
-    println(solution)
+//    println(s"Solution:\n${getString(solution.getOrElse(List()))}")
   }
 
 }
