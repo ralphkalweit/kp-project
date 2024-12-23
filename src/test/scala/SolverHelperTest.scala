@@ -1,4 +1,4 @@
-import Main.SolverHelper.{insertAtFirstBlank}
+import Main.SolverHelper.insertAtFirstBlank
 import Main.SudokuIO.{getGrid, getString}
 import org.scalatest.funsuite.AnyFunSuite
 

@@ -2,7 +2,7 @@ import Main.SudokuIO.{asIntGrid, getGrid, asStringGrid}
 import Main.CellValidation.listContainsOnlyValidStrings
 import org.scalatest.funsuite.AnyFunSuite
 
-class ParseTests extends AnyFunSuite {
+class ParseTest extends AnyFunSuite {
 
   test("wrong shape") {
     val sudoku = "_\n_ 2"
@@ -19,11 +19,17 @@ class ParseTests extends AnyFunSuite {
   }
 
   test("gridify 3x3") {
-    assert(asStringGrid("_ _ _\n_ _ _\n_ _ _").length == 3)
+    assertThrows[RuntimeException](asStringGrid("_ _ _\n_ _ _\n_ _ _"))
+    // TODO support any type of sudoku, not just n^2 x n^2
+    // assert(asStringGrid("_ _ _\n_ _ _\n_ _ _").length == 3)
   }
 
   test("more spaces, no problems?") {
-    assert(asStringGrid("_  _ _\n_ _ _ \n_ _       _").length == 3)
+    assert(
+      asStringGrid(
+        "_  _ _ _\n_ _ _ _ \n_ _ _       _\n_   _   _     _"
+      ).length == 4
+    )
     assert(asStringGrid("1 2 3 4\n3 _ _ 2 \n 2 1 4 3 \n4 3 2 1").length == 4)
   }
 
@@ -50,14 +56,14 @@ class ParseTests extends AnyFunSuite {
   }
 
   test("to int grid") {
-    val strGrid = asStringGrid("_ _ _\n_ _ _\n_ _ _")
+    val strGrid = asStringGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
     val intGrid = asIntGrid(strGrid)
 
     intGrid.foreach {
       _.foreach { * => assert(*.isEmpty) }
     }
 
-    val _grid = asStringGrid("1 2 3\n3 2 1\n3 2 1")
+    val _grid = asStringGrid("1 2 3 4\n3 2 1 4\n3 2 1 4\n3 2 1 4")
     val grid2 = asIntGrid(_grid)
     grid2.foreach { _.foreach { * => assert(*.nonEmpty) } }
   }
@@ -73,6 +79,5 @@ class ParseTests extends AnyFunSuite {
         assert(optList.length == strList.length)
       }
     }
-
   }
 }
