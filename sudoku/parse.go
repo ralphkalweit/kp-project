@@ -89,12 +89,11 @@ func toCellGrid(stringGrid [][]string) ([][]Cell, error) {
 }
 
 func toStringGrid(grid [][]Cell) ([][]string, error) {
+	cellWidth := len(strconv.Itoa(len(grid)))
+
 	return util.Map(grid, func(row []Cell) ([]string, error) {
 		return util.Map(row, func(cell Cell) (string, error) {
-			if cell.Empty {
-				return "_", nil
-			}
-			return strconv.Itoa(cell.Value), nil
+			return toStringWithLen(cell, cellWidth)
 		})
 	})
 }
@@ -125,4 +124,17 @@ func loadSudokuFromFile(filePath string) ([][]Cell, error) {
 		return [][]Cell{}, err
 	}
 	return loadSudokuFromString(fileContent)
+}
+
+func saveSudokuToFile(filePath string, grid [][]Cell) error {
+	fileContent, err := getStringFromCellGrid(grid)
+	if err != nil {
+		return err
+	}
+
+	err = writeSudokuFile(filePath, fileContent)
+	if err != nil {
+		return err
+	}
+	return nil
 }

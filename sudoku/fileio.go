@@ -23,7 +23,6 @@ func readSudokuFile(filename string) (string, error) {
 
 func writeSudokuFile(filename string, content string) error {
 	return os.WriteFile(filename, []byte(content), 0644)
-
 }
 
 func getStringFromStringGrid(stringGrid [][]string) string {
