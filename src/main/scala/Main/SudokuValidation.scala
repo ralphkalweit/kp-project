@@ -2,25 +2,19 @@ package Main
 
 object SudokuValidation {
 
-  def getSudokuRows(grid: List[List[Option[Int]]]): List[List[Option[Int]]] = {
+  def getSudokuRows[T](grid: List[List[T]]): List[List[T]] = {
     grid
   }
 
-  def getSudokuColumns(
-      grid: List[List[Option[Int]]]
-  ): List[List[Option[Int]]] = {
+  def getSudokuColumns[T](
+      grid: List[List[T]]
+  ): List[List[T]] = {
     grid.transpose
   }
 
-  def getSudokuSquareBlocks(
-      grid: List[List[Option[Int]]]
-  ): List[List[Option[Int]]] = {
-    grid.transpose
-  }
-
-  def getSudokuBlocks(
-      grid: List[List[Option[Int]]]
-  ): List[List[Option[Int]]] = {
+  def getSudokuBlocks[T](
+      grid: List[List[T]]
+  ): List[List[T]] = {
     val size = grid.length
     val boxSize = math.sqrt(size).toInt
     require(
@@ -39,18 +33,21 @@ object SudokuValidation {
     }).toList
   }
 
+  def getSudokuFromSudokuBlocks[T](
+      grid: List[List[T]]
+  ): List[List[T]] =
+    getSudokuBlocks(grid)
+
   def isCompleteList(list: List[Option[Int]]): Boolean = {
     list.nonEmpty && !list.contains(None)
   }
 
-  def hasErrors(grid: List[List[Option[Int]]]): Boolean = {
+  def hasLogicalErrors(grid: List[List[Option[Int]]]): Boolean = {
     val regions =
       List(
         getSudokuRows(grid),
         getSudokuColumns(grid),
-        getSudokuBlocks(
-          grid
-        )
+        getSudokuBlocks(grid)
       ).flatten
 
     !regions.forall(list => {
@@ -60,20 +57,21 @@ object SudokuValidation {
   }
 
   def isCompleteSudoku(grid: List[List[Option[Int]]]): Boolean = {
-    if grid.isEmpty then return false
+    if (grid.isEmpty) false
+    else {
+      val noMissing =
+        List(
+          getSudokuRows(grid),
+          getSudokuColumns(grid),
+          getSudokuBlocks(
+            grid
+          )
+        ).flatten.forall(isCompleteList)
 
-    val noMissing =
-      List(
-        getSudokuRows(grid),
-        getSudokuColumns(grid),
-        getSudokuBlocks(
-          grid
-        )
-      ).flatten.forall(isCompleteList)
+      val unique = !hasLogicalErrors(grid)
 
-    val unique = !hasErrors(grid)
-
-    noMissing && unique
+      noMissing && unique
+    }
   }
 
 }

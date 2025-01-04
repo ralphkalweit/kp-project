@@ -64,7 +64,6 @@ class LinterStylerTest extends AnyFunSuite {
     )
 
     saveSudoku(filePath, grid)
-
   }
 
   test("empty 100 x 100") {

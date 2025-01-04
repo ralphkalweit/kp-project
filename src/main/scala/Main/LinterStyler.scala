@@ -11,9 +11,7 @@ object LinterStyler {
       remainingLen >= 0,
       s"Number too big for maximum length $uniformLen. (Number: $cellContent)"
     )
-    val prefix = " ".repeat(remainingLen)
-
-    s"$prefix$original"
+    " " * remainingLen + original
   }
 
   def getUniformLength(dimensionSize: Int): Int = dimensionSize.toString.length

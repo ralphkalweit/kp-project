@@ -14,7 +14,9 @@ class BacktrackingTest extends AnyFunSuite {
   }
 
   test("Empty") {
-    assert(backtracking(List(getGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"))).nonEmpty)
+    assert(
+      backtracking(List(getGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"))).nonEmpty
+    )
   }
 
   test("Solvable 9x9") {
@@ -25,6 +27,19 @@ class BacktrackingTest extends AnyFunSuite {
 
     assert(solution.nonEmpty)
 //    println(s"Solution:\n${getString(solution.getOrElse(List()))}")
+  }
+
+  test("not solvable") {
+    assert(
+      backtracking(List(getGrid("1 _ _ _\n2 _ 3 4\n_ _ _ _\n_ _ _ _"))).isEmpty
+    )
+    assert(
+      backtracking(List(getGrid("1 _ _ _\n_ 2 3 4\n_ _ _ _\n_ _ _ _"))).isEmpty
+    )
+    assert(
+      backtracking(List(getGrid("1 _ _ _\n_ _ _ 4\n_ _ _ 3\n_ _ _ 2"))).isEmpty
+    )
+
   }
 
 }

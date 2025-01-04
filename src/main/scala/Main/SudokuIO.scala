@@ -66,18 +66,26 @@ object SudokuIO {
     }
   }
 
-  def getString[T](
+  def getString(
       grid: List[List[Option[Int]]]
   ): String = {
+    val uniformLength = getUniformLength(grid.length)
+
     grid
-      .map { row =>
-        row
-          .map { * =>
-            toStringWithLen(*, getUniformLength(grid.length))
-          }
+      .map {
+        _.map { toStringWithLen(_, uniformLength) }
           .mkString(" ")
       }
       .mkString("\n")
+  }
+
+  def areEqual[T](
+      sudoku1: List[List[T]],
+      sudoku2: List[List[T]]
+  ): Boolean = {
+    sudoku1.zip(sudoku2).forall { (row1, row2) =>
+      row1.zip(row2).forall(_ == _)
+    }
   }
 
   def saveSudoku(filePath: String, sudoku: List[List[Option[Int]]]): Unit = {
@@ -95,6 +103,5 @@ object SudokuIO {
       case _            => ()
     }
     List()
-
   }
 }
