@@ -1,5 +1,5 @@
-import Main.Backtracking.backtracking
-import Main.SudokuIO.{getGrid, getString}
+import sudoku.Backtracking.backtracking
+import sudoku.SudokuIO.{getGrid, getString}
 import org.scalatest.funsuite.AnyFunSuite
 
 class BacktrackingTest extends AnyFunSuite {

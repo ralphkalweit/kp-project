@@ -1,4 +1,4 @@
-import Main.SudokuIO.{getFileContent, getGrid, getString, saveSudoku}
+import sudoku.SudokuIO.{getFileContent, getGrid, getString, saveSudoku}
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.nio.file.{Files, Paths}

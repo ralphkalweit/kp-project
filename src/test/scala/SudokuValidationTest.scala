@@ -1,6 +1,6 @@
-import Main.SudokuIO.{getGrid, asStringGrid}
+import sudoku.SudokuIO.{getGrid, asStringGrid}
 import org.scalatest.funsuite.AnyFunSuite
-import Main.SudokuValidation.{
+import sudoku.SudokuValidation.{
   getSudokuBlocks,
   getSudokuColumns,
   getSudokuRows,

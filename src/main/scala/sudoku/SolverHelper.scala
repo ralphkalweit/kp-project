@@ -1,13 +1,7 @@
-package Main
+package sudoku
 
-import Main.SudokuIO.areEqual
-import Main.SudokuValidation.{
-  getSudokuBlocks,
-  getSudokuColumns,
-  getSudokuRows,
-  hasLogicalErrors,
-  isCompleteSudoku
-}
+import sudoku.SudokuIO.areEqual
+import sudoku.SudokuValidation.*
 
 import scala.annotation.tailrec
 
@@ -77,7 +71,6 @@ object SolverHelper {
   }
 
   def eliminateListFromAllSingles(list: List[Set[Int]]): List[Set[Int]] = {
-
     val singles = list.collect {
       case s if s.size == 1 => s.head
     }.toSet
@@ -97,4 +90,27 @@ object SolverHelper {
     isCompleteSudoku(sudoku) && !hasLogicalErrors(sudoku)
   }
 
+  def isPartialSolution(
+      part: List[List[Option[Int]]],
+      complete: List[List[Option[Int]]]
+  ): Boolean = {
+    if (part.isEmpty) return true
+    if (part.length != complete.length) return false
+    if (hasLogicalErrors(part)) return false
+    
+    part
+      .zip(complete)
+      .forall((leftRow, rightRow) =>
+        leftRow
+          .zip(rightRow)
+          .forall((leftItem, rightItem) =>
+            (leftItem, rightItem) match {
+              case (Some(p), Some(c)) if p == c => true
+              case (None, _)                    => true
+              case (_, _)                       => false
+            }
+          )
+      )
+
+  }
 }

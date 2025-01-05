@@ -1,4 +1,4 @@
-package Main
+package sudoku
 
 object SudokuValidation {
 

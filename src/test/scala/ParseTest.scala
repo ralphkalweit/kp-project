@@ -1,5 +1,5 @@
-import Main.SudokuIO.{asIntGrid, getGrid, asStringGrid}
-import Main.CellValidation.listContainsOnlyValidStrings
+import sudoku.SudokuIO.{asIntGrid, getGrid, asStringGrid}
+import sudoku.CellValidation.listContainsOnlyValidStrings
 import org.scalatest.funsuite.AnyFunSuite
 
 class ParseTest extends AnyFunSuite {

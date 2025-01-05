@@ -1,6 +1,6 @@
 import org.scalatest.funsuite.AnyFunSuite
-import Main.LinterStyler.toStringWithLen
-import Main.SudokuIO.{
+import sudoku.LinterStyler.toStringWithLen
+import sudoku.SudokuIO.{
   asIntGrid,
   asStringGrid,
   getCellString,

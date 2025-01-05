@@ -1,7 +1,7 @@
-package Main
+package sudoku
 
-import Main.SolverHelper.insertAtFirstBlank
-import Main.SudokuValidation.{hasLogicalErrors, isCompleteSudoku}
+import sudoku.SolverHelper.insertAtFirstBlank
+import sudoku.SudokuValidation.{hasLogicalErrors, isCompleteSudoku}
 
 import scala.annotation.tailrec
 

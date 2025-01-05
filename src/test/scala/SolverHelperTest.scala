@@ -1,15 +1,10 @@
-import Main.SolverHelper.{
-  eliminateListFromAllSingles,
-  eliminateOneStep,
-  eliminateRecursive,
-  eliminationMatrixIsSolved,
-  getEliminationMatrix,
-  getSudokuFromEliminationMatrix,
-  insertAtFirstBlank
-}
-import Main.SudokuIO.{areEqual, getGrid, getString}
-import Main.SudokuValidation.{getSudokuBlocks, getSudokuFromSudokuBlocks}
+import sudoku.SolverHelper.{eliminateListFromAllSingles, eliminateOneStep, eliminateRecursive, eliminationMatrixIsSolved, getEliminationMatrix, getSudokuFromEliminationMatrix, insertAtFirstBlank, isPartialSolution}
+import sudoku.SudokuIO.{areEqual, getGrid, getString, saveSudoku}
+import sudoku.SudokuValidation.{getSudokuBlocks, getSudokuFromSudokuBlocks, hasLogicalErrors, isCompleteList, isCompleteSudoku}
 import org.scalatest.funsuite.AnyFunSuite
+import sudoku.Strategies.trySolveWithElimination
+
+import scala.::
 
 class SolverHelperTest extends AnyFunSuite {
 
@@ -127,6 +122,44 @@ class SolverHelperTest extends AnyFunSuite {
         areEqual(result, expectedResult)
       )
     }
+  }
+
+  test("partial Solution 4x4") {
+    assert(isPartialSolution(List(), List()))
+    val x4_empty = "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
+    val sudokuList = x4_empty :: List("_ 2 _ 4\n_ 4 _ 2\n2 1 4 3\n4 3 2 1", "1 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
+
+    sudokuList.foreach(str =>
+      val grid = getGrid(str)
+      assert(isPartialSolution(grid, grid))
+      assert(isPartialSolution(getGrid(x4_empty), grid))
+    )
+  }
+
+  test("elimination won't help with everything") {
+    val str = "_ 2 _ 4\n_ 4 _ 2\n2 1 4 3\n4 3 2 1"
+    val grid = getGrid(str)
+
+    val attempt = trySolveWithElimination(grid)
+    assert(isPartialSolution(grid, grid))
+
+    assert(attempt == grid)
+    assert(isPartialSolution(attempt, grid))
+
+  }
+
+  test("eliminate 9x9") {
+    val x9 =
+      "_ _ _ 7 _ _ _ _ _\n7 2 _ _ _ 9 _ 5 1\n8 9 1 _ 2 6 _ 7 _\n9 _ 3 2 _ _ _ 6 8\n6 8 _ 1 _ _ 3 4 2\n2 5 4 _ _ _ _ _ _\n_ _ 9 3 1 _ 6 8 _\n_ _ _ 9 5 _ _ _ 4\n_ 3 _ 6 7 _ _ 1 _"
+    //
+    val grid = getGrid(x9)
+    val eliminated = trySolveWithElimination(grid)
+    saveSudoku("9x9.sudoku", eliminated)
+    //
+    assert(!hasLogicalErrors(eliminated))
+    assert(isCompleteSudoku(eliminated))
+    //
+    assert(isPartialSolution(grid, eliminated))
   }
 
 }

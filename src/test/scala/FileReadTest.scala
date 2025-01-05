@@ -1,4 +1,4 @@
-import Main.SudokuIO.getFileContent
+import sudoku.SudokuIO.getFileContent
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.nio.file.{Files, Paths}

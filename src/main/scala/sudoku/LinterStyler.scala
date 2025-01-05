@@ -1,6 +1,6 @@
-package Main
+package sudoku
 
-import Main.SudokuIO.getCellString
+import sudoku.SudokuIO.getCellString
 
 object LinterStyler {
 

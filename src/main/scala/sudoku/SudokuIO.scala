@@ -1,10 +1,11 @@
-package Main
+package sudoku
+
+import sudoku.CellValidation.listContainsOnlyValidStrings
+import sudoku.LinterStyler.{getUniformLength, toStringWithLen}
 
 import java.io.{FileNotFoundException, PrintWriter}
 import scala.io.Source
 import scala.util.Using
-import Main.CellValidation.listContainsOnlyValidStrings
-import Main.LinterStyler.{getUniformLength, toStringWithLen}
 
 object SudokuIO {
 
@@ -12,8 +13,10 @@ object SudokuIO {
     val fileContentOpt = Using(Source.fromFile(filePath)) { source =>
       source.getLines().mkString("\n")
     }
-    require(fileContentOpt.isSuccess, s"Failed to read file at $filePath")
-    require(fileContentOpt.get.nonEmpty, s"File $filePath is empty")
+    if (!fileContentOpt.isSuccess)
+      throw new FileNotFoundException(s"Failed to read file at $filePath")
+    if (fileContentOpt.get.isEmpty)
+      throw new FileNotFoundException(s"File $filePath is empty")
     fileContentOpt.get
   }
 
@@ -97,11 +100,10 @@ object SudokuIO {
   def loadSudoku(filePath: String): List[List[Option[Int]]] = {
     try {
       val str = getFileContent(filePath)
-      return getGrid(str)
+      getGrid(str)
     } catch {
-      case e: Exception => println(e.toString)
-      case _            => ()
+      case e: Exception => throw e
+      case _            => List()
     }
-    List()
   }
 }
