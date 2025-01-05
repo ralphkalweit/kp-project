@@ -1,4 +1,4 @@
-import sudoku.SudokuIO.{asIntGrid, getGrid, asStringGrid}
+import sudoku.SudokuIO.{asIntGrid, asSudokuStringGrid, getLogicalGrid}
 import sudoku.CellValidation.listContainsOnlyValidStrings
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -7,7 +7,7 @@ class ParseTest extends AnyFunSuite {
   test("wrong shape") {
     val sudoku = "_\n_ 2"
     try {
-      asStringGrid(sudoku)
+      asSudokuStringGrid(sudoku)
     } catch {
       case e: RuntimeException => assert(true)
       case _                   => assert(false)
@@ -15,27 +15,29 @@ class ParseTest extends AnyFunSuite {
   }
 
   test("gridify 1x1") {
-    assert(asStringGrid("_").nonEmpty)
+    assert(asSudokuStringGrid("_").nonEmpty)
   }
 
   test("gridify 3x3") {
-    assertThrows[RuntimeException](asStringGrid("_ _ _\n_ _ _\n_ _ _"))
+    assertThrows[RuntimeException](asSudokuStringGrid("_ _ _\n_ _ _\n_ _ _"))
     // TODO support any type of sudoku, not just n^2 x n^2
-    // assert(asStringGrid("_ _ _\n_ _ _\n_ _ _").length == 3)
+    // assert(asSudokuStringGrid("_ _ _\n_ _ _\n_ _ _").length == 3)
   }
 
   test("more spaces, no problems?") {
     assert(
-      asStringGrid(
+      asSudokuStringGrid(
         "_  _ _ _\n_ _ _ _ \n_ _ _       _\n_   _   _     _"
       ).length == 4
     )
-    assert(asStringGrid("1 2 3 4\n3 _ _ 2 \n 2 1 4 3 \n4 3 2 1").length == 4)
+    assert(
+      asSudokuStringGrid("1 2 3 4\n3 _ _ 2 \n 2 1 4 3 \n4 3 2 1").length == 4
+    )
   }
 
   test("unsupported Character") {
     try {
-      asStringGrid("_ a\n_ (")
+      asSudokuStringGrid("_ a\n_ (")
     } catch {
       case e: Exception => assert(true)
       case _            => assert(false)
@@ -52,26 +54,26 @@ class ParseTest extends AnyFunSuite {
     assert(!listContainsOnlyValidStrings(list2, 5))
 
     val wrong = "_ a\n2 _"
-    assertThrows[RuntimeException](asStringGrid(wrong))
+    assertThrows[RuntimeException](asSudokuStringGrid(wrong))
   }
 
   test("to int grid") {
-    val strGrid = asStringGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
+    val strGrid = asSudokuStringGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
     val intGrid = asIntGrid(strGrid)
 
     intGrid.foreach {
       _.foreach { * => assert(*.isEmpty) }
     }
 
-    val _grid = asStringGrid("1 2 3 4\n3 2 1 4\n3 2 1 4\n3 2 1 4")
+    val _grid = asSudokuStringGrid("1 2 3 4\n3 2 1 4\n3 2 1 4\n3 2 1 4")
     val grid2 = asIntGrid(_grid)
     grid2.foreach { _.foreach { * => assert(*.nonEmpty) } }
   }
 
   test("int grid from many spaces") {
     val str = "1 2  3 4 \n3 _   _ 2 \n 2 1 4   3 \n4 3 2 1"
-    val strGrid = asStringGrid(str)
-    val optGrid = getGrid(str)
+    val strGrid = asSudokuStringGrid(str)
+    val optGrid = getLogicalGrid(str)
 
     assert(strGrid.length == optGrid.length)
     strGrid.foreach { strList =>

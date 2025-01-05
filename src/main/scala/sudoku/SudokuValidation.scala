@@ -1,5 +1,7 @@
 package sudoku
 
+import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuLogicalList}
+
 object SudokuValidation {
 
   def getSudokuRows[T](grid: List[List[T]]): List[List[T]] = {
@@ -38,11 +40,11 @@ object SudokuValidation {
   ): List[List[T]] =
     getSudokuBlocks(grid)
 
-  def isCompleteList(list: List[Option[Int]]): Boolean = {
+  def isCompleteList(list: SudokuLogicalList): Boolean = {
     list.nonEmpty && !list.contains(None)
   }
 
-  def hasLogicalErrors(grid: List[List[Option[Int]]]): Boolean = {
+  def hasLogicalErrors(grid: SudokuLogicalGrid): Boolean = {
     val regions =
       List(
         getSudokuRows(grid),
@@ -56,7 +58,7 @@ object SudokuValidation {
     })
   }
 
-  def isCompleteSudoku(grid: List[List[Option[Int]]]): Boolean = {
+  def isCompleteSudoku(grid: SudokuLogicalGrid): Boolean = {
     if (grid.isEmpty) false
     else {
       val noMissing =

@@ -1,6 +1,7 @@
 package sudoku
 
 import sudoku.SudokuIO.areEqual
+import sudoku.SudokuTypes.{SudokuEliminationMatrix, SudokuLogicalGrid}
 import sudoku.SudokuValidation.*
 
 import scala.annotation.tailrec
@@ -8,9 +9,9 @@ import scala.annotation.tailrec
 object SolverHelper {
 
   def insertAtFirstBlank(
-      sudoku: List[List[Option[Int]]],
-      element: Int
-  ): List[List[Option[Int]]] = {
+                          sudoku: SudokuLogicalGrid,
+                          element: Int
+  ): SudokuLogicalGrid = {
     if (element > sudoku.length) sudoku
     else {
       val rowIndex = sudoku.indexWhere(_.contains(None))
@@ -25,8 +26,8 @@ object SolverHelper {
   }
 
   def getEliminationMatrix(
-      sudoku: List[List[Option[Int]]]
-  ): List[List[Set[Int]]] = {
+      sudoku: SudokuLogicalGrid
+  ): SudokuEliminationMatrix = {
     val fullSet = (1 to sudoku.length).toSet
     sudoku.map(_.map {
       case Some(number) => Set(number)
@@ -35,8 +36,8 @@ object SolverHelper {
   }
 
   def getSudokuFromEliminationMatrix(
-      eliminationMatrix: List[List[Set[Int]]]
-  ): List[List[Option[Int]]] = {
+      eliminationMatrix: SudokuEliminationMatrix
+  ): SudokuLogicalGrid = {
     eliminationMatrix.map(_.map {
       case set if set.size == 1 =>
         Some(set.head)
@@ -45,10 +46,10 @@ object SolverHelper {
   }
 
   def eliminateOneStep(
-      possibilities: List[List[Set[Int]]]
-  ): List[List[Set[Int]]] = {
-    type T = List[List[Set[Int]]]
-    val transformers = List[List[List[Set[Int]]] => List[List[Set[Int]]]](
+      possibilities: SudokuEliminationMatrix
+  ): SudokuEliminationMatrix = {
+    type T = SudokuEliminationMatrix
+    val transformers = List[SudokuEliminationMatrix => SudokuEliminationMatrix](
       getSudokuRows,
       getSudokuColumns,
       getSudokuBlocks
@@ -63,8 +64,8 @@ object SolverHelper {
 
   @tailrec
   def eliminateRecursive(
-      possibilities: List[List[Set[Int]]]
-  ): List[List[Set[Int]]] = {
+      possibilities: SudokuEliminationMatrix
+  ): SudokuEliminationMatrix = {
     val next = eliminateOneStep(possibilities)
     if (areEqual(next, possibilities)) possibilities
     else eliminateRecursive(next)
@@ -78,26 +79,26 @@ object SolverHelper {
   }
 
   def eliminationMatrixHasOpenDecisions(
-      possibilities: List[List[Set[Int]]]
+      possibilities: SudokuEliminationMatrix
   ): Boolean = {
     !possibilities.forall(_.forall(_.size == 1))
   }
 
   def eliminationMatrixIsSolved(
-      possibilities: List[List[Set[Int]]]
+      possibilities: SudokuEliminationMatrix
   ): Boolean = {
     val sudoku = getSudokuFromEliminationMatrix(possibilities)
     isCompleteSudoku(sudoku) && !hasLogicalErrors(sudoku)
   }
 
   def isPartialSolution(
-      part: List[List[Option[Int]]],
-      complete: List[List[Option[Int]]]
+                         part: SudokuLogicalGrid,
+                         complete: SudokuLogicalGrid
   ): Boolean = {
     if (part.isEmpty) return true
     if (part.length != complete.length) return false
     if (hasLogicalErrors(part)) return false
-    
+
     part
       .zip(complete)
       .forall((leftRow, rightRow) =>

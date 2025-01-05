@@ -2,6 +2,7 @@ package Main
 
 import sudoku.Strategies.trySolveWithElimination
 import sudoku.SudokuIO.{loadSudoku, saveSudoku}
+import sudoku.SudokuTypes.SudokuLogicalGrid
 import sudoku.SudokuValidation.isCompleteSudoku
 
 @main def demo(): Unit =
@@ -13,7 +14,7 @@ def demonstration(): Unit = {
   val fileName = "9x9.sudoku"
   val fileNameEdited = fileName.replace(".", "_edited.")
 
-  val sudoku: List[List[Option[Int]]] = try {
+  val sudoku: SudokuLogicalGrid = try {
     val s = loadSudoku(fileName)
     if (s.isEmpty) throw new RuntimeException()
     s

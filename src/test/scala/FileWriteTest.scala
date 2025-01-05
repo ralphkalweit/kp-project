@@ -1,4 +1,4 @@
-import sudoku.SudokuIO.{getFileContent, getGrid, getString, saveSudoku}
+import sudoku.SudokuIO.{getFileContent, getLogicalGrid, getString, saveSudoku}
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.nio.file.{Files, Paths}
@@ -11,17 +11,17 @@ class FileWriteTest extends AnyFunSuite {
     val sudokuString = "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
     // TODO initial string can contain spaces more that will be removed when using getString
     // logical sudoku stays the same but spaces could be helpful for readability of n x ns with n>9
-    assert(sudokuString == getString(getGrid(sudokuString)))
+    assert(sudokuString == getString(getLogicalGrid(sudokuString)))
 
     val sudokuString2 =
       "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 2" // contains an error
-    assert(sudokuString2 == getString(getGrid(sudokuString2)))
+    assert(sudokuString2 == getString(getLogicalGrid(sudokuString2)))
   }
 
   test("Save file to valid path (and read it from there)") {
     val path = "test.sudoku"
     val sudokuString = "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
-    val sudoku = getGrid(sudokuString)
+    val sudoku = getLogicalGrid(sudokuString)
 
     saveSudoku(path, sudoku)
     assert(sudokuString == getFileContent(path))

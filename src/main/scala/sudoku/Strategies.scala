@@ -1,16 +1,13 @@
 package sudoku
 
-import sudoku.SolverHelper.{
-  eliminateRecursive,
-  getEliminationMatrix,
-  getSudokuFromEliminationMatrix
-}
+import sudoku.SolverHelper.{eliminateRecursive, getEliminationMatrix, getSudokuFromEliminationMatrix}
+import sudoku.SudokuTypes.SudokuLogicalGrid
 
 object Strategies {
 
   def trySolveWithElimination(
-      sudoku: List[List[Option[Int]]]
-  ): List[List[Option[Int]]] = {
+      sudoku: SudokuLogicalGrid
+  ): SudokuLogicalGrid = {
     val possibilities = getEliminationMatrix(sudoku)
     val done = eliminateRecursive(
       possibilities

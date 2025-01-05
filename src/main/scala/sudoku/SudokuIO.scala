@@ -2,6 +2,7 @@ package sudoku
 
 import sudoku.CellValidation.listContainsOnlyValidStrings
 import sudoku.LinterStyler.{getUniformLength, toStringWithLen}
+import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuStringGrid}
 
 import java.io.{FileNotFoundException, PrintWriter}
 import scala.io.Source
@@ -20,7 +21,7 @@ object SudokuIO {
     fileContentOpt.get
   }
 
-  def asStringGrid(fileContent: String): List[List[String]] = {
+  def asSudokuStringGrid(fileContent: String): SudokuStringGrid = {
     val rows = fileContent.split('\n')
     val assumedDim = rows.length
     val sqrt = math.sqrt(assumedDim).intValue()
@@ -29,7 +30,7 @@ object SudokuIO {
       s"Expected shape n^2 * n^2 but found $assumedDim * $assumedDim"
     )
 
-    val grid: List[List[String]] = rows.map { row =>
+    val grid: SudokuStringGrid = rows.map { row =>
       val list = row.split(" ").toList.filter(cell => cell.nonEmpty)
       require(
         list.length == assumedDim,
@@ -45,7 +46,7 @@ object SudokuIO {
     grid
   }
 
-  def asIntGrid(grid: List[List[String]]): List[List[Option[Int]]] = {
+  def asIntGrid(grid: SudokuStringGrid): SudokuLogicalGrid = {
     grid.map(
       _.map(str =>
         try {
@@ -58,8 +59,8 @@ object SudokuIO {
     )
   }
 
-  def getGrid(fileContent: String): List[List[Option[Int]]] = asIntGrid(
-    asStringGrid(fileContent)
+  def getLogicalGrid(fileContent: String): SudokuLogicalGrid = asIntGrid(
+    asSudokuStringGrid(fileContent)
   )
 
   def getCellString(cellContent: Option[Int]): String = {
@@ -70,7 +71,7 @@ object SudokuIO {
   }
 
   def getString(
-      grid: List[List[Option[Int]]]
+      grid: SudokuLogicalGrid
   ): String = {
     val uniformLength = getUniformLength(grid.length)
 
@@ -91,16 +92,16 @@ object SudokuIO {
     }
   }
 
-  def saveSudoku(filePath: String, sudoku: List[List[Option[Int]]]): Unit = {
+  def saveSudoku(filePath: String, sudoku: SudokuLogicalGrid): Unit = {
     Using(new PrintWriter(filePath)) { writer =>
       writer.write(getString(sudoku))
     }
   }
 
-  def loadSudoku(filePath: String): List[List[Option[Int]]] = {
+  def loadSudoku(filePath: String): SudokuLogicalGrid = {
     try {
       val str = getFileContent(filePath)
-      getGrid(str)
+      getLogicalGrid(str)
     } catch {
       case e: Exception => throw e
       case _            => List()

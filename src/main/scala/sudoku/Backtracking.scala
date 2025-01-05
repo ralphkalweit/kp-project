@@ -1,6 +1,7 @@
 package sudoku
 
 import sudoku.SolverHelper.insertAtFirstBlank
+import sudoku.SudokuTypes.SudokuLogicalGrid
 import sudoku.SudokuValidation.{hasLogicalErrors, isCompleteSudoku}
 
 import scala.annotation.tailrec
@@ -8,8 +9,8 @@ import scala.annotation.tailrec
 object Backtracking {
 
   private def expand(
-      grid: List[List[Option[Int]]]
-  ): List[List[List[Option[Int]]]] = {
+      grid: SudokuLogicalGrid
+  ): List[SudokuLogicalGrid] = {
     (1 to grid.length).flatMap { candidate =>
       val newGrid = insertAtFirstBlank(grid, candidate)
       if (!hasLogicalErrors(newGrid)) Some(newGrid)
@@ -19,8 +20,8 @@ object Backtracking {
 
   @tailrec
   def backtracking(
-      frontier: List[List[List[Option[Int]]]]
-  ): Option[List[List[Option[Int]]]] = {
+      frontier: List[SudokuLogicalGrid]
+  ): Option[SudokuLogicalGrid] = {
     frontier match {
       case currentGrid :: rest =>
         if (isCompleteSudoku(currentGrid)) {
