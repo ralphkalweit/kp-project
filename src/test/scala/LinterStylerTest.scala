@@ -10,6 +10,7 @@ import sudoku.SudokuIO.{
 }
 
 import java.io.PrintWriter
+import java.nio.file.{Files, Paths}
 import scala.util.Using
 
 class LinterStylerTest extends AnyFunSuite {
@@ -46,7 +47,7 @@ class LinterStylerTest extends AnyFunSuite {
 
   test("convert, lint, convert 16x16") {
 
-    val filePath = "CLC_16.sudoku"
+    val filePath = "16x16_TEST_LINT.sudoku"
 
     val sudoku16: String =
       "5 _ _ _ _ 8 _ _ 3 _ _ _ _ _ _ 7\n_ 7 _ 1 _ _ _ 9 _ _ _ _ _ _ _ _\n_ _ _ _ 6 _ _ _ 5 _ _ _ _ 12 _ _\n_ 2 _ _ _ _ 6 _ _ _ _ _ _ _ _ _\n_ _ _ 3 _ 7 _ _ _ _ 9 _ _ _ _ _\n_ _ _ _ _ _ _ 4 _ _ _ _ _ 1 _ _\n12 _ _ _ _ _ _ _ 7 _ _ _ _ _ _ 6\n_ _ _ _ _ 5 _ _ _ _ _ _ 9 _ _ _\n_ _ _ _ _ _ _ _ _ _ _ 14 _ _ 6 _\n9 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n_ 12 _ _ _ 6 _ _ _ _ _ _ _ _ _ _\n_ _ _ _ 5 _ _ _ 9 _ _ _ _ _ _ _\n_ _ 9 _ _ _ _ _ _ _ _ _ 8 _ _ _\n_ _ _ _ _ _ _ 7 _ _ 14 _ _ _ _ _\n_ _ _ _ _ 9 _ _ _ 13 _ _ _ _ 8 _\n6 _ _ _ _ _ _ _ _ _ _ _ _ _ _ 5"
@@ -62,7 +63,10 @@ class LinterStylerTest extends AnyFunSuite {
       newString.replace(" ", "").length == sudoku16.replace(" ", "").length
     )
 
-    saveSudoku(filePath, grid)
+    val filePath2 = Paths.get(filePath)
+    if (Files.exists(filePath2)) {
+      Files.delete(filePath2)
+    }
   }
 
   test("empty 100 x 100") {

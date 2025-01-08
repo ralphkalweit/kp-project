@@ -1,46 +1,48 @@
 package Main
 
 import sudoku.Strategies.trySolveWithElimination
-import sudoku.SudokuIO.{loadSudoku, saveSudoku}
+import sudoku.SudokuIO.{
+  getString,
+  userInteractionLoadSudoku,
+  userInteractionSaveSudoku
+}
 import sudoku.SudokuTypes.SudokuLogicalGrid
 import sudoku.SudokuValidation.isCompleteSudoku
 
-@main def demo(): Unit =
+@main def main(): Unit = {
   println("Starting demonstration!")
   demonstration()
+}
 
 def demonstration(): Unit = {
 
-  val fileName = "9x9.sudoku"
-  val fileNameEdited = fileName.replace(".", "_edited.")
+  val (sudoku, chosenFilePath) = userInteractionLoadSudoku()
 
-  val sudoku: SudokuLogicalGrid = try {
-    val s = loadSudoku(fileName)
-    if (s.isEmpty) throw new RuntimeException()
-    s
-  } catch {
-    case e: Exception =>
-      println(s"Error: ${e.getMessage}")
-      return
-  }
-
-  println(s"Sudoku loaded: $sudoku")
+  println(s"Sudoku loaded:\n${getString(sudoku)}\n")
 
   if (isCompleteSudoku(sudoku)) {
     println("The Sudoku is already solved.")
-    saveSudoku(fileNameEdited, sudoku)
+    userInteractionSaveSudoku(chosenFilePath, sudoku)
   } else {
-    val hopefullySolved = trySolveWithElimination(sudoku)
+
     // TODO allow user to choose different strategies here
+    val strategies: Map[String, SudokuLogicalGrid => SudokuLogicalGrid] = Map(
+      "Elimination" -> trySolveWithElimination
+    )
+    // TODO maybe use contextual abstraction here to provide a solver?
+
+    val chosenStrategy = "Elimination"
+    println(s"Using $chosenStrategy to solve the sudoku...")
+    val hopefullySolved = strategies(chosenStrategy)(sudoku)
     if (isCompleteSudoku(hopefullySolved)) {
-      println("Sudoku solved!")
-      saveSudoku("4x4_solved.sudoku", hopefullySolved)
+      println("Found a solution for the sudoku!")
     } else {
-      println("Could not find a complete solution with this strategy. Please try a different one next time.")
-      // todo print sudoku or ask to save it
+      println(
+        "Could not find a complete solution with this strategy. Please try a different strategy next time."
+      )
     }
+    println(getString(hopefullySolved))
+    userInteractionSaveSudoku(chosenFilePath, hopefullySolved)
 
   }
-
-
 }
