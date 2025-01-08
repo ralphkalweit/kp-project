@@ -70,9 +70,7 @@ object SudokuValidation {
           )
         ).flatten.forall(isCompleteList)
 
-      val unique = !hasLogicalErrors(grid)
-
-      noMissing && unique
+      noMissing && !hasLogicalErrors(grid)
     }
   }
 

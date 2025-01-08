@@ -41,7 +41,6 @@ class SudokuValidationTest extends AnyFunSuite {
     )
 
     // last row is wrong:
-    // TODO maybe expect an error here instead
     assert(
       !isCompleteSudoku(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n2 2 2 2"))
     )
