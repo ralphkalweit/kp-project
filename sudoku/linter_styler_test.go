@@ -55,7 +55,7 @@ func Test4x4Empty(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	linted, err := getStringFromCellGrid(cellGrid)
+	linted, err := GetStringFromCellGrid(cellGrid)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -91,11 +91,11 @@ _ _ _ _ _ 9 _ _ _ 13 _ _ _ _ 8 _
 	}
 	defer os.Remove(filePath)
 
-	grid, err := loadSudokuFromFile(filePath)
+	grid, err := LoadSudokuFromFile(filePath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	newString, err := getStringFromCellGrid(grid)
+	newString, err := GetStringFromCellGrid(grid)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -127,7 +127,7 @@ func TestEmpty100x100(t *testing.T) {
 		}
 	}
 	sudoku, err := loadSudokuFromString(sb.String())
-	linted, err := getStringFromCellGrid(sudoku)
+	linted, err := GetStringFromCellGrid(sudoku)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -4,8 +4,8 @@ import (
 	"kp/util"
 )
 
-func backtracking(grid [][]Cell) [][]Cell {
-	if isCompleteSudoku(grid) {
+func Backtracking(grid [][]Cell) [][]Cell {
+	if IsCompleteSudoku(grid) {
 		return grid
 	}
 
@@ -18,12 +18,12 @@ func backtracking(grid [][]Cell) [][]Cell {
 
 	transformFn := func(candidate int) ([][][]Cell, error) {
 		testGrid := placeCandidate(grid, row, col, candidate)
-		if hasErrors(testGrid) {
+		if HasErrors(testGrid) {
 			return nil, nil
 		}
 
 		newGrid := placeCandidate(grid, row, col, candidate)
-		solution := backtracking(newGrid)
+		solution := Backtracking(newGrid)
 		if solution == nil {
 			return nil, nil
 		}

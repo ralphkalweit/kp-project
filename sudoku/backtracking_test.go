@@ -11,12 +11,12 @@ func TestBacktrackingSolvable4x4(t *testing.T) {
 		t.Fatal("no solution found")
 	}
 
-	solution := backtracking(grid)
+	solution := Backtracking(grid)
 	if solution == nil {
 		t.Fatal("no solution found")
 	}
 
-	solutionString, err := getStringFromCellGrid(solution)
+	solutionString, err := GetStringFromCellGrid(solution)
 	if err != nil {
 		t.Fatal("failed to convert solution to string")
 	}
@@ -34,7 +34,7 @@ func TestBacktrackingEmpty4x4(t *testing.T) {
 		t.Fatal("no solution found")
 	}
 
-	solution := backtracking(grid)
+	solution := Backtracking(grid)
 	if solution == nil {
 		t.Fatal("no solution found")
 	}
@@ -53,7 +53,7 @@ func TestBacktrackingSolvable9x9(t *testing.T) {
 		t.Fatal("failed to convert to cell grid")
 	}
 
-	solution := backtracking(cellGrid)
+	solution := Backtracking(cellGrid)
 	if solution == nil {
 		t.Fatal("no solution found")
 	}
@@ -72,7 +72,7 @@ func TestNotSolvable(t *testing.T) {
 			t.Fatal("no solution found")
 		}
 
-		solution := backtracking(grid)
+		solution := Backtracking(grid)
 		if solution != nil {
 			t.Fatal("there should be no solution")
 		}

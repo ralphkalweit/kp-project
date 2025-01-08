@@ -121,12 +121,12 @@ func TestLoadCellGridFromFile(t *testing.T) {
 		t.Fatalf("%v", err)
 	}
 
-	grid, err := loadSudokuFromFile(filename)
+	grid, err := LoadSudokuFromFile(filename)
 	if err != nil {
 		t.Fatal("Error loading cell grid")
 	}
 
-	actual, err := getStringFromCellGrid(grid)
+	actual, err := GetStringFromCellGrid(grid)
 	if err != nil {
 		t.Fatal("Unexpected error")
 	}
@@ -136,4 +136,29 @@ func TestLoadCellGridFromFile(t *testing.T) {
 	if actual != expected {
 		t.Fatalf("%q != %q", expected, actual)
 	}
+}
+
+func TestGetStringFromCellGrid(t *testing.T) {
+	cellGrid := [][]Cell{
+		{{Value: 1}, {Value: 3}, {Value: 2}, {Value: 4}},
+		{{Value: 2}, {Value: 4}, {Value: 1}, {Value: 3}},
+		{{Value: 3}, {Value: 1}, {Value: 4}, {Value: 2}},
+		{{Value: 4}, {Value: 2}, {Value: 3}, {Empty: true}},
+	}
+	str, _ := GetStringFromCellGrid(cellGrid)
+	expectedStr := "1 3 2 4\n2 4 1 3\n3 1 4 2\n4 2 3 _"
+	if str != expectedStr {
+		t.Fatal("error")
+	}
+}
+
+func TestGetStringFromStringGrid(t *testing.T) {
+	strGrid := [][]string{{"1", "3", "2", "4"}, {"2", "4", "1", "3"}, {"3", "1", "4", "2"}, {"4", "2", "3", "_"}}
+	expectedStr := "1 3 2 4\n2 4 1 3\n3 1 4 2\n4 2 3 _"
+
+	actualStr := getStringFromStringGrid(strGrid)
+	if actualStr != expectedStr {
+		t.Fatal("error")
+	}
+
 }

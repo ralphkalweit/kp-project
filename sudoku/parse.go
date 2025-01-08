@@ -98,7 +98,7 @@ func toStringGrid(grid [][]Cell) ([][]string, error) {
 	})
 }
 
-func getStringFromCellGrid(grid [][]Cell) (string, error) {
+func GetStringFromCellGrid(grid [][]Cell) (string, error) {
 	stringGrid, err := toStringGrid(grid)
 	if err != nil {
 		return "", err
@@ -118,7 +118,7 @@ func loadSudokuFromString(input string) ([][]Cell, error) {
 	return cellGrid, nil
 }
 
-func loadSudokuFromFile(filePath string) ([][]Cell, error) {
+func LoadSudokuFromFile(filePath string) ([][]Cell, error) {
 	fileContent, err := readSudokuFile(filePath)
 	if err != nil {
 		return [][]Cell{}, err
@@ -126,8 +126,8 @@ func loadSudokuFromFile(filePath string) ([][]Cell, error) {
 	return loadSudokuFromString(fileContent)
 }
 
-func saveSudokuToFile(filePath string, grid [][]Cell) error {
-	fileContent, err := getStringFromCellGrid(grid)
+func SaveSudokuToFile(filePath string, grid [][]Cell) error {
+	fileContent, err := GetStringFromCellGrid(grid)
 	if err != nil {
 		return err
 	}

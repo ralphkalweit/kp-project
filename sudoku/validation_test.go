@@ -14,7 +14,7 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 	}
 
 	actualRowsGrid := getSudokuRows(grid)
-	actualRows, err := getStringFromCellGrid(actualRowsGrid)
+	actualRows, err := GetStringFromCellGrid(actualRowsGrid)
 	if err != nil {
 		t.Error("Unexpected error")
 	}
@@ -33,7 +33,7 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 
 	expectedCols := "1 3 2 4\n2 4 1 3\n3 1 4 2\n4 2 3 1"
 	actualColsGrid := getSudokuColumns(grid)
-	actualCols, err := getStringFromCellGrid(actualColsGrid)
+	actualCols, err := GetStringFromCellGrid(actualColsGrid)
 	if err != nil {
 		t.Error("Unexpected error")
 	}
@@ -52,7 +52,7 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 	expectedBlocks := "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
 
 	actualBlocksGrid := getSudokuBlocksQuadratic(grid)
-	actualBlocks, err := getStringFromCellGrid(actualBlocksGrid)
+	actualBlocks, err := GetStringFromCellGrid(actualBlocksGrid)
 	if err != nil {
 		t.Error("Unexpected error")
 	}
@@ -79,7 +79,7 @@ func TestIsCompleteList(t *testing.T) {
 }
 
 func TestIsCompleteSudoku(t *testing.T) {
-	if isCompleteSudoku(nil) {
+	if IsCompleteSudoku(nil) {
 		t.Fatal("nil sudoku can not be complete!")
 	}
 
@@ -89,7 +89,7 @@ func TestIsCompleteSudoku(t *testing.T) {
 		t.Fatal("error")
 	}
 
-	if !isCompleteSudoku(sudoku) {
+	if !IsCompleteSudoku(sudoku) {
 		t.Fatal("This sudoku has no empty fields or errors")
 	}
 
@@ -99,12 +99,12 @@ func TestIsCompleteSudoku(t *testing.T) {
 		{{2, false}, {1, false}, {4, false}, {3, false}},
 		{{1, false}, {Empty: true}, {1, false}, {1, false}},
 	}
-	if isCompleteSudoku(invalidSudoku) {
+	if IsCompleteSudoku(invalidSudoku) {
 		t.Fatal("expected incomplete sudoku")
 	}
 
 	notComplete9, err := loadSudokuFromString("3 4 5 7 8 1 9 2 6\n7 2 6 4 3 9 8 5 1\n8 9 1 5 2 6 4 7 3\n9 1 3 2 4 7 5 6 8\n6 8 7 1 9 5 3 4 2\n2 5 4 8 6 3 1 9 7\n4 7 9 3 1 2 6 8 5\n1 6 2 9 5 8 7 3 4\n5 3 8 6 7 4 2 1 _")
-	if isCompleteSudoku(notComplete9) {
+	if IsCompleteSudoku(notComplete9) {
 		t.Fatal("expected incomplete sudoku")
 	}
 
@@ -122,7 +122,7 @@ func TestHasErrors(t *testing.T) {
 		{"4", "3", "2", "1"},
 	}
 	cellGrid1, _ := toCellGrid(grid1)
-	if hasErrors(cellGrid1) {
+	if HasErrors(cellGrid1) {
 		t.Fatal("expected no errors")
 	}
 
@@ -133,7 +133,7 @@ func TestHasErrors(t *testing.T) {
 		{"4", "3", "3", "2"},
 	}
 	cellGrid2, _ := toCellGrid(grid2)
-	if !hasErrors(cellGrid2) {
+	if !HasErrors(cellGrid2) {
 		t.Fatal("expected errors")
 	}
 
@@ -144,7 +144,7 @@ func TestHasErrors(t *testing.T) {
 		{"4", "_", "2", "1"},
 	}
 	cellGrid3, _ := toCellGrid(grid3)
-	if hasErrors(cellGrid3) {
+	if HasErrors(cellGrid3) {
 		t.Fatal("expected no errors")
 	}
 
@@ -155,7 +155,7 @@ func TestHasErrors(t *testing.T) {
 		{"4", "_", "2", "1"},
 	}
 	cellGrid31, _ := toCellGrid(grid31)
-	if hasErrors(cellGrid31) {
+	if HasErrors(cellGrid31) {
 		t.Fatal("expected no errors")
 	}
 
@@ -166,7 +166,7 @@ func TestHasErrors(t *testing.T) {
 		{"_", "_", "_", "_"},
 	}
 	cellGrid4, _ := toCellGrid(grid4)
-	if !hasErrors(cellGrid4) {
+	if !HasErrors(cellGrid4) {
 		t.Fatal("expected errors")
 	}
 
@@ -177,7 +177,7 @@ func TestHasErrors(t *testing.T) {
 		{"_", "_", "_", "_"},
 	}
 	cellGrid5, _ := toCellGrid(grid5)
-	if hasErrors(cellGrid5) {
+	if HasErrors(cellGrid5) {
 		t.Fatal("expected no errors")
 	}
 
@@ -193,7 +193,7 @@ func TestHasErrors(t *testing.T) {
 		{"9", "1", "2", "3", "4", "5", "6", "7", "8"},
 	}
 	cellGrid6, _ := toCellGrid(grid6)
-	if hasErrors(cellGrid6) {
+	if HasErrors(cellGrid6) {
 		t.Fatal("expected no errors")
 	}
 }

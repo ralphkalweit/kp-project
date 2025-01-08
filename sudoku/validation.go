@@ -64,7 +64,7 @@ func isCompleteList(list []Cell) bool {
 	return true
 }
 
-func isCompleteSudoku(grid [][]Cell) bool {
+func IsCompleteSudoku(grid [][]Cell) bool {
 	if grid == nil {
 		return false
 	}
@@ -73,10 +73,10 @@ func isCompleteSudoku(grid [][]Cell) bool {
 			return false
 		}
 	}
-	return !hasErrors(grid)
+	return !HasErrors(grid)
 }
 
-func hasErrors(grid [][]Cell) bool {
+func HasErrors(grid [][]Cell) bool {
 	hasDuplicate := func(region []Cell) bool {
 		seen := make(map[int]bool)
 		for _, cell := range region {
