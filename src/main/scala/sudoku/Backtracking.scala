@@ -1,7 +1,13 @@
 package sudoku
 
-import sudoku.SolverHelper.insertAtFirstBlank
-import sudoku.SudokuTypes.SudokuLogicalGrid
+import sudoku.SolverHelper.{
+  eliminateRecursive,
+  eliminationMatrixIsSolved,
+  getEliminationMatrix,
+  getSudokuFromEliminationMatrix,
+  insertAtFirstBlank
+}
+import sudoku.SudokuTypes.{SudokuEliminationMatrix, SudokuLogicalGrid}
 import sudoku.SudokuValidation.{hasLogicalErrors, isCompleteSudoku}
 
 import scala.annotation.tailrec
@@ -19,21 +25,56 @@ object Backtracking {
   }
 
   @tailrec
-  def backtracking(
-      frontier: List[SudokuLogicalGrid]
+  def backtrackingWithoutElimination(
+      pendingCandidates: List[SudokuLogicalGrid],
+      useDFS: Boolean = true
   ): Option[SudokuLogicalGrid] = {
-    frontier match {
+    pendingCandidates match {
       case currentGrid :: rest =>
         if (isCompleteSudoku(currentGrid)) {
           Some(currentGrid)
         } else {
           val nextStates = expand(currentGrid)
-          // TODO add option to choose between DFS and BFS
-          backtracking(nextStates ::: rest) //DFS
+          val newFrontier =
+            if (useDFS) nextStates ::: rest else rest ::: nextStates
+          backtrackingWithoutElimination(newFrontier)
         }
       case Nil => None
     }
+  }
 
+  private def hasContradiction(
+      possibilities: SudokuEliminationMatrix
+  ): Boolean =
+    possibilities.exists(_.exists(_.isEmpty))
+
+  @tailrec
+  def backtrackingWithElimination(
+      pendingCandidates: List[SudokuLogicalGrid],
+      useDFS: Boolean = true
+  ): Option[SudokuLogicalGrid] = {
+    pendingCandidates match {
+      case Nil => None
+      case currentGrid :: rest =>
+        val possibilities = getEliminationMatrix(currentGrid)
+        val eliminated = eliminateRecursive(possibilities)
+
+        if (hasContradiction(eliminated)) {
+          backtrackingWithElimination(rest, useDFS)
+        } else {
+          if (eliminationMatrixIsSolved(eliminated)) {
+            Some(getSudokuFromEliminationMatrix(eliminated))
+          } else {
+            val partiallySolved = getSudokuFromEliminationMatrix(eliminated)
+            val nextStates = expand(partiallySolved)
+
+            val newFrontier =
+              if (useDFS) nextStates ::: rest else rest ::: nextStates
+
+            backtrackingWithElimination(newFrontier, useDFS)
+          }
+        }
+    }
   }
 
 }

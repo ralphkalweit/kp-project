@@ -9,8 +9,8 @@ import scala.annotation.tailrec
 object SolverHelper {
 
   def insertAtFirstBlank(
-                          sudoku: SudokuLogicalGrid,
-                          element: Int
+      sudoku: SudokuLogicalGrid,
+      element: Int
   ): SudokuLogicalGrid = {
     if (element > sudoku.length) sudoku
     else {
@@ -92,8 +92,8 @@ object SolverHelper {
   }
 
   def isPartialSolution(
-                         part: SudokuLogicalGrid,
-                         complete: SudokuLogicalGrid
+      part: SudokuLogicalGrid,
+      complete: SudokuLogicalGrid
   ): Boolean = {
     if (part.isEmpty) return true
     if (part.length != complete.length) return false
