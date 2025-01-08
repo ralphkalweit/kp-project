@@ -65,12 +65,15 @@ func isCompleteList(list []Cell) bool {
 }
 
 func isCompleteSudoku(grid [][]Cell) bool {
+	if grid == nil {
+		return false
+	}
 	for _, row := range grid {
 		if !isCompleteList(row) {
 			return false
 		}
 	}
-	return true
+	return !hasErrors(grid)
 }
 
 func hasErrors(grid [][]Cell) bool {

@@ -79,14 +79,18 @@ func TestIsCompleteList(t *testing.T) {
 }
 
 func TestIsCompleteSudoku(t *testing.T) {
-	sudoku := [][]Cell{
-		{{1, false}, {2, false}, {3, false}, {4, false}},
-		{{3, false}, {4, false}, {1, false}, {2, false}},
-		{{2, false}, {1, false}, {4, false}, {3, false}},
-		{{4, false}, {3, false}, {2, false}, {1, false}},
+	if isCompleteSudoku(nil) {
+		t.Fatal("nil sudoku can not be complete!")
 	}
+
+	validSudoku := "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
+	sudoku, err := loadSudokuFromString(validSudoku)
+	if err != nil {
+		t.Fatal("error")
+	}
+
 	if !isCompleteSudoku(sudoku) {
-		t.Fatal("expected complete sudoku")
+		t.Fatal("This sudoku has no empty fields or errors")
 	}
 
 	invalidSudoku := [][]Cell{
@@ -98,6 +102,16 @@ func TestIsCompleteSudoku(t *testing.T) {
 	if isCompleteSudoku(invalidSudoku) {
 		t.Fatal("expected incomplete sudoku")
 	}
+
+	notComplete9, err := loadSudokuFromString("3 4 5 7 8 1 9 2 6\n7 2 6 4 3 9 8 5 1\n8 9 1 5 2 6 4 7 3\n9 1 3 2 4 7 5 6 8\n6 8 7 1 9 5 3 4 2\n2 5 4 8 6 3 1 9 7\n4 7 9 3 1 2 6 8 5\n1 6 2 9 5 8 7 3 4\n5 3 8 6 7 4 2 1 _")
+	if isCompleteSudoku(notComplete9) {
+		t.Fatal("expected incomplete sudoku")
+	}
+
+	if err != nil {
+		t.Fatal("error")
+	}
+
 }
 
 func TestHasErrors(t *testing.T) {
