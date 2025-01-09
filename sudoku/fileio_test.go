@@ -94,7 +94,7 @@ func TestOverwriteFile(t *testing.T) {
 }
 
 func TestGetString(t *testing.T) {
-	strGrid := [][]string{{"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}}
+	strGrid := StringGrid{{"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}}
 	singleString := getStringFromStringGrid(strGrid)
 
 	rows := strings.Split(singleString, "\n")
@@ -112,7 +112,7 @@ func TestGetString(t *testing.T) {
 }
 
 func TestLoadCellGridFromFile(t *testing.T) {
-	strGrid := [][]string{{"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}}
+	strGrid := StringGrid{{"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}, {"1", "2", "3", "4"}}
 	filename := "test_load_into_cell_grid.txt"
 	defer os.Remove(filename)
 
@@ -139,7 +139,7 @@ func TestLoadCellGridFromFile(t *testing.T) {
 }
 
 func TestGetStringFromCellGrid(t *testing.T) {
-	cellGrid := [][]Cell{
+	cellGrid := LogicalGrid{
 		{{Value: 1}, {Value: 3}, {Value: 2}, {Value: 4}},
 		{{Value: 2}, {Value: 4}, {Value: 1}, {Value: 3}},
 		{{Value: 3}, {Value: 1}, {Value: 4}, {Value: 2}},
@@ -153,7 +153,7 @@ func TestGetStringFromCellGrid(t *testing.T) {
 }
 
 func TestGetStringFromStringGrid(t *testing.T) {
-	strGrid := [][]string{{"1", "3", "2", "4"}, {"2", "4", "1", "3"}, {"3", "1", "4", "2"}, {"4", "2", "3", "_"}}
+	strGrid := StringGrid{{"1", "3", "2", "4"}, {"2", "4", "1", "3"}, {"3", "1", "4", "2"}, {"4", "2", "3", "_"}}
 	expectedStr := "1 3 2 4\n2 4 1 3\n3 1 4 2\n4 2 3 _"
 
 	actualStr := getStringFromStringGrid(strGrid)

@@ -24,7 +24,7 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 		t.Error("rows are incorrect")
 	}
 
-	//expectedCols := [][]Cell{
+	//expectedCols := LogicalGrid{
 	//	{{Value: 1}, {Value: 3}, {Value: 2}, {Value: 4}},
 	//	{{Value: 2}, {Value: 4}, {Value: 1}, {Value: 3}},
 	//	{{Value: 3}, {Value: 1}, {Value: 4}, {Value: 2}},
@@ -42,7 +42,7 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 		t.Error("columns are incorrect")
 	}
 
-	//expectedBlocks := [][]Cell{
+	//expectedBlocks := LogicalGrid{
 	//	{{Value: 1}, {Value: 2}, {Value: 3}, {Value: 4}},
 	//	{{Value: 3}, {Value: 4}, {Value: 1}, {Value: 2}},
 	//	{{Value: 2}, {Value: 1}, {Value: 4}, {Value: 3}},
@@ -51,7 +51,7 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 
 	expectedBlocks := "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
 
-	actualBlocksGrid := getSudokuBlocksQuadratic(grid)
+	actualBlocksGrid := getSudokuBlocks(grid)
 	actualBlocks, err := GetStringFromCellGrid(actualBlocksGrid)
 	if err != nil {
 		t.Error("Unexpected error")
@@ -64,16 +64,16 @@ func TestGetSudokuRegions4x4(t *testing.T) {
 }
 
 func TestIsCompleteList(t *testing.T) {
-	if !isCompleteList([]Cell{{1, false}, {2, false}, {3, false}, {4, false}}) {
+	if !isCompleteList(CellList{{1, false}, {2, false}, {3, false}, {4, false}}) {
 		t.Fatal("expected complete list")
 	}
-	if isCompleteList([]Cell{{1, false}, {4, true}}) {
+	if isCompleteList(CellList{{1, false}, {4, true}}) {
 		t.Fatal("expected incomplete list")
 	}
-	if isCompleteList([]Cell{{1, false}, {2, true}}) {
+	if isCompleteList(CellList{{1, false}, {2, true}}) {
 		t.Fatal("expected incomplete list")
 	}
-	if isCompleteList([]Cell{}) {
+	if isCompleteList(CellList{}) {
 		t.Fatal("expected incomplete list for empty")
 	}
 }
@@ -93,7 +93,7 @@ func TestIsCompleteSudoku(t *testing.T) {
 		t.Fatal("This sudoku has no empty fields or errors")
 	}
 
-	invalidSudoku := [][]Cell{
+	invalidSudoku := LogicalGrid{
 		{{1, false}, {2, false}, {3, false}, {4, false}},
 		{{3, false}, {4, false}, {1, false}, {2, false}},
 		{{2, false}, {1, false}, {4, false}, {3, false}},
@@ -115,7 +115,7 @@ func TestIsCompleteSudoku(t *testing.T) {
 }
 
 func TestHasErrors(t *testing.T) {
-	grid1 := [][]string{
+	grid1 := StringGrid{
 		{"1", "2", "3", "4"},
 		{"3", "4", "1", "2"},
 		{"2", "1", "4", "3"},
@@ -126,7 +126,7 @@ func TestHasErrors(t *testing.T) {
 		t.Fatal("expected no errors")
 	}
 
-	grid2 := [][]string{
+	grid2 := StringGrid{
 		{"1", "2", "3", "4"},
 		{"3", "4", "1", "2"},
 		{"2", "1", "4", "3"},
@@ -137,7 +137,7 @@ func TestHasErrors(t *testing.T) {
 		t.Fatal("expected errors")
 	}
 
-	grid3 := [][]string{
+	grid3 := StringGrid{
 		{"1", "2", "3", "4"},
 		{"3", "4", "1", "2"},
 		{"2", "1", "4", "3"},
@@ -148,7 +148,7 @@ func TestHasErrors(t *testing.T) {
 		t.Fatal("expected no errors")
 	}
 
-	grid31 := [][]string{
+	grid31 := StringGrid{
 		{"1", "2", "3", "4"},
 		{"_", "4", "_", "2"},
 		{"2", "1", "4", "3"},
@@ -159,7 +159,7 @@ func TestHasErrors(t *testing.T) {
 		t.Fatal("expected no errors")
 	}
 
-	grid4 := [][]string{
+	grid4 := StringGrid{
 		{"_", "_", "_", "1"},
 		{"_", "_", "_", "_"},
 		{"_", "_", "_", "1"},
@@ -170,7 +170,7 @@ func TestHasErrors(t *testing.T) {
 		t.Fatal("expected errors")
 	}
 
-	grid5 := [][]string{
+	grid5 := StringGrid{
 		{"_", "_", "_", "_"},
 		{"_", "_", "_", "_"},
 		{"_", "_", "_", "_"},
@@ -181,7 +181,7 @@ func TestHasErrors(t *testing.T) {
 		t.Fatal("expected no errors")
 	}
 
-	grid6 := [][]string{
+	grid6 := StringGrid{
 		{"1", "2", "3", "4", "5", "6", "7", "8", "9"},
 		{"4", "5", "6", "7", "8", "9", "1", "2", "3"},
 		{"7", "8", "9", "1", "2", "3", "4", "5", "6"},

@@ -60,7 +60,7 @@ func TestBacktrackingSolvable9x9(t *testing.T) {
 }
 
 func TestNotSolvable(t *testing.T) {
-	sudokuStrings := []string{
+	sudokuStrings := StringList{
 		"1 _ _ _\n2 _ 3 4\n_ _ _ _\n_ _ _ _",
 		"1 _ _ _\n_ 2 3 4\n_ _ _ _\n_ _ _ _",
 		"1 _ _ _\n_ _ _ 4\n_ _ _ 3\n_ _ _ 2",

@@ -7,7 +7,7 @@ import (
 )
 
 func TestAdjustNumDigits(t *testing.T) {
-	cells := []Cell{
+	cells := CellList{
 		{Value: 1},
 		{Value: 10},
 		{Empty: true},

@@ -9,16 +9,16 @@ import (
 	"strings"
 )
 
-func parseSudokuString(input string) ([][]string, error) {
+func parseSudokuString(input string) (StringGrid, error) {
 	rows := strings.Split(strings.TrimSpace(input), "\n")
-	grid := [][]string{}
+	grid := StringGrid{}
 
 	sqrt := int(math.Sqrt(float64(len(rows))))
 	if sqrt*sqrt != len(rows) {
 		return nil, errors.New("expected shape n^2 * n^2")
 	}
 
-	grid, err := util.Map(rows, func(row string) ([]string, error) {
+	grid, err := util.Map(rows, func(row string) (StringList, error) {
 		cells := strings.Fields(row)
 		if len(cells) != len(rows) {
 			return nil, errors.New("invalid Sudoku shape")
@@ -47,7 +47,7 @@ func isValidCell(cell string, maxNumber int) bool {
 	return cell == "_"
 }
 
-func listContainsOnlyValidStrings(list []string, maxNumber int) bool {
+func listContainsOnlyValidStrings(list StringList, maxNumber int) bool {
 	invalidStrings := util.Filter(list, func(str string) bool {
 		if str == "_" {
 			return false
@@ -59,11 +59,6 @@ func listContainsOnlyValidStrings(list []string, maxNumber int) bool {
 	return len(invalidStrings) == 0
 }
 
-type Cell struct {
-	Value int
-	Empty bool
-}
-
 func (c Cell) String() string {
 	if c.Empty {
 		return "_"
@@ -71,8 +66,8 @@ func (c Cell) String() string {
 	return fmt.Sprintf("%d", c.Value)
 }
 
-func toCellGrid(stringGrid [][]string) ([][]Cell, error) {
-	return util.Map(stringGrid, func(row []string) ([]Cell, error) {
+func toCellGrid(stringGrid StringGrid) (LogicalGrid, error) {
+	return util.Map(stringGrid, func(row StringList) (CellList, error) {
 		return util.Map(row, func(cell string) (Cell, error) {
 			if cell == "_" {
 				return Cell{Empty: true}, nil
@@ -88,17 +83,17 @@ func toCellGrid(stringGrid [][]string) ([][]Cell, error) {
 	})
 }
 
-func toStringGrid(grid [][]Cell) ([][]string, error) {
+func toStringGrid(grid LogicalGrid) (StringGrid, error) {
 	cellWidth := len(strconv.Itoa(len(grid)))
 
-	return util.Map(grid, func(row []Cell) ([]string, error) {
+	return util.Map(grid, func(row CellList) (StringList, error) {
 		return util.Map(row, func(cell Cell) (string, error) {
 			return toStringWithLen(cell, cellWidth)
 		})
 	})
 }
 
-func GetStringFromCellGrid(grid [][]Cell) (string, error) {
+func GetStringFromCellGrid(grid LogicalGrid) (string, error) {
 	stringGrid, err := toStringGrid(grid)
 	if err != nil {
 		return "", err
@@ -106,27 +101,27 @@ func GetStringFromCellGrid(grid [][]Cell) (string, error) {
 	return getStringFromStringGrid(stringGrid), nil
 }
 
-func loadSudokuFromString(input string) ([][]Cell, error) {
+func loadSudokuFromString(input string) (LogicalGrid, error) {
 	stringGrid, err := parseSudokuString(input)
 	if err != nil {
-		return [][]Cell{}, err
+		return LogicalGrid{}, err
 	}
 	cellGrid, err := toCellGrid(stringGrid)
 	if err != nil {
-		return [][]Cell{}, err
+		return LogicalGrid{}, err
 	}
 	return cellGrid, nil
 }
 
-func LoadSudokuFromFile(filePath string) ([][]Cell, error) {
+func LoadSudokuFromFile(filePath string) (LogicalGrid, error) {
 	fileContent, err := readSudokuFile(filePath)
 	if err != nil {
-		return [][]Cell{}, err
+		return LogicalGrid{}, err
 	}
 	return loadSudokuFromString(fileContent)
 }
 
-func SaveSudokuToFile(filePath string, grid [][]Cell) error {
+func SaveSudokuToFile(filePath string, grid LogicalGrid) error {
 	fileContent, err := GetStringFromCellGrid(grid)
 	if err != nil {
 		return err

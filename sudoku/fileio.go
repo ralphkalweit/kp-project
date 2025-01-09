@@ -25,8 +25,8 @@ func writeSudokuFile(filename string, content string) error {
 	return os.WriteFile(filename, []byte(content), 0644)
 }
 
-func getStringFromStringGrid(stringGrid [][]string) string {
-	return util.Reduce(stringGrid, "", func(acc string, row []string) string {
+func getStringFromStringGrid(stringGrid StringGrid) string {
+	return util.Reduce(stringGrid, "", func(acc string, row StringList) string {
 		if acc == "" {
 			return strings.Join(row, " ")
 		}

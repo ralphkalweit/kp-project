@@ -5,14 +5,14 @@ import (
 	"math"
 )
 
-func getSudokuRows(grid [][]Cell) [][]Cell {
+func getSudokuRows(grid LogicalGrid) LogicalGrid {
 	return grid
 }
 
-func getSudokuColumns(grid [][]Cell) [][]Cell {
+func getSudokuColumns(grid LogicalGrid) LogicalGrid {
 	size := len(grid)
 
-	columns, _ := util.Map(util.RangeIndices(size), func(i int) ([]Cell, error) {
+	columns, _ := util.Map(util.RangeIndices(size), func(i int) (CellList, error) {
 		col, _ := util.Map(util.RangeIndices(size), func(j int) (Cell, error) {
 			return grid[j][i], nil
 		})
@@ -22,12 +22,12 @@ func getSudokuColumns(grid [][]Cell) [][]Cell {
 	return columns
 }
 
-func getSudokuBlocksQuadratic(grid [][]Cell) [][]Cell {
+func getSudokuBlocks(grid LogicalGrid) LogicalGrid {
 	size := len(grid)
 	blockSize := int(math.Sqrt(float64(size)))
 
-	getBlock := func(blockRow, blockCol int) []Cell {
-		block := make([]Cell, 0, size)
+	getBlock := func(blockRow, blockCol int) CellList {
+		block := make(CellList, 0, size)
 		for i := 0; i < blockSize; i++ {
 			for j := 0; j < blockSize; j++ {
 				block = append(
@@ -39,7 +39,7 @@ func getSudokuBlocksQuadratic(grid [][]Cell) [][]Cell {
 		return block
 	}
 
-	blocks, _ := util.Map(util.RangeIndices(size), func(idx int) ([]Cell, error) {
+	blocks, _ := util.Map(util.RangeIndices(size), func(idx int) (CellList, error) {
 		blockRow := idx / blockSize
 		blockCol := idx % blockSize
 		return getBlock(blockRow, blockCol), nil
@@ -48,7 +48,7 @@ func getSudokuBlocksQuadratic(grid [][]Cell) [][]Cell {
 	return blocks
 }
 
-func isCompleteList(list []Cell) bool {
+func isCompleteList(list CellList) bool {
 	if len(list) == 0 {
 		return false
 	}
@@ -64,7 +64,7 @@ func isCompleteList(list []Cell) bool {
 	return true
 }
 
-func IsCompleteSudoku(grid [][]Cell) bool {
+func IsCompleteSudoku(grid LogicalGrid) bool {
 	if grid == nil {
 		return false
 	}
@@ -76,8 +76,8 @@ func IsCompleteSudoku(grid [][]Cell) bool {
 	return !HasErrors(grid)
 }
 
-func HasErrors(grid [][]Cell) bool {
-	hasDuplicate := func(region []Cell) bool {
+func HasErrors(grid LogicalGrid) bool {
+	hasDuplicate := func(region CellList) bool {
 		seen := make(map[int]bool)
 		for _, cell := range region {
 			if cell.Empty {
@@ -92,12 +92,12 @@ func HasErrors(grid [][]Cell) bool {
 	}
 
 	regions := util.Concatenate(
-		getSudokuRows(grid),
-		getSudokuColumns(grid),
-		getSudokuBlocksQuadratic(grid),
+		grid.getRows(),
+		grid.getColumns(),
+		grid.getBlocks(),
 	)
 
-	return util.Reduce(regions, false, func(acc bool, region []Cell) bool {
+	return util.Reduce(regions, false, func(acc bool, region CellList) bool {
 		return acc || hasDuplicate(region)
 	})
 }

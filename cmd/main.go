@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type SolvingStrategyFunc func([][]sudoku.Cell) [][]sudoku.Cell
+type SolvingStrategyFunc func(sudoku.LogicalGrid) sudoku.LogicalGrid
 
 func main() {
 	fmt.Println("Starting demonstration!")
@@ -36,16 +36,16 @@ func demonstration(filename string, strategy SolvingStrategyFunc) {
 	}
 	fmt.Println(str)
 
-	if sudoku.HasErrors(loadedSudoku) {
+	if loadedSudoku.HasErrors() {
 		fmt.Println("Sudoku has errors")
-	} else if sudoku.IsCompleteSudoku(loadedSudoku) {
+	} else if loadedSudoku.IsComplete() {
 		fmt.Println("Sudoku is complete!")
 	} else {
 		chosenStrategy := strategy
 
 		hopefullySolvedSudoku := chosenStrategy(loadedSudoku)
 
-		if sudoku.IsCompleteSudoku(hopefullySolvedSudoku) {
+		if hopefullySolvedSudoku.IsComplete() {
 			fmt.Println("Found a solution for the sudoku!")
 		} else {
 			fmt.Println("Could not find a complete solution with this strategy. Please try a different strategy next time.")

@@ -56,7 +56,7 @@ func TestUnsupportedChars(t *testing.T) {
 }
 
 func TestContainsOnlyValidStrings(t *testing.T) {
-	list := []string{"1", "2", "_", "4", "5"}
+	list := StringList{"1", "2", "_", "4", "5"}
 
 	if !listContainsOnlyValidStrings(list, 5) {
 		t.Fatal("expected valid")
@@ -68,12 +68,12 @@ func TestContainsOnlyValidStrings(t *testing.T) {
 		t.Fatal("expected invalid")
 	}
 
-	list2 := []string{"-1"}
+	list2 := StringList{"-1"}
 	if listContainsOnlyValidStrings(list2, 5) {
 		t.Fatal("expected invalid")
 	}
 
-	wrongGrid := [][]string{
+	wrongGrid := StringGrid{
 		{"_", "a"},
 		{"2", "_"},
 	}
@@ -84,7 +84,7 @@ func TestContainsOnlyValidStrings(t *testing.T) {
 }
 
 func TestToCellGridEmptyCells(t *testing.T) {
-	strGrid := [][]string{
+	strGrid := StringGrid{
 		{"_", "_", "_", "_"},
 		{"_", "_", "_", "_"},
 		{"_", "_", "_", "_"},
@@ -106,7 +106,7 @@ func TestToCellGridEmptyCells(t *testing.T) {
 }
 
 func TestToCellGridValidNumbers(t *testing.T) {
-	strGrid := [][]string{
+	strGrid := StringGrid{
 		{"1", "2", "3", "4"},
 		{"3", "2", "1", "4"},
 		{"3", "2", "1", "4"},
@@ -118,7 +118,7 @@ func TestToCellGridValidNumbers(t *testing.T) {
 		t.Fatal("unexpected error")
 	}
 
-	expected := [][]Cell{
+	expected := LogicalGrid{
 		{{Value: 1, Empty: false}, {Value: 2, Empty: false}, {Value: 3, Empty: false}, {Value: 4, Empty: false}},
 		{{Value: 3, Empty: false}, {Value: 2, Empty: false}, {Value: 1, Empty: false}, {Value: 4, Empty: false}},
 		{{Value: 3, Empty: false}, {Value: 2, Empty: false}, {Value: 1, Empty: false}, {Value: 4, Empty: false}},
@@ -135,7 +135,7 @@ func TestToCellGridValidNumbers(t *testing.T) {
 }
 
 func TestToCellGridInvalidCharacter(t *testing.T) {
-	strGrid := [][]string{
+	strGrid := StringGrid{
 		{"1", "2", "3", "4"},
 		{"3", "2", "1", "a"},
 		{"3", "2", "1", "4"},
@@ -149,7 +149,7 @@ func TestToCellGridInvalidCharacter(t *testing.T) {
 }
 
 func TestToStringGrid(t *testing.T) {
-	strGrid := [][]string{
+	strGrid := StringGrid{
 		{"1", "2", "3", "4"},
 		{"3", "2", "1", "4"},
 		{"3", "2", "1", "4"},
