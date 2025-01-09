@@ -46,9 +46,11 @@ object UserInteractions {
   def userInteractionLoadSudoku(
   ): (SudokuLogicalGrid, String) = {
     val chosenFilePath = getUserInput(
-      s"Please type in the file name of the sudoku file to open it:"
+      s"Please type in the file name of the sudoku file to open it (enter `:q` to quit):"
     )
     chosenFilePath match {
+      case ":q"   => (Vector(), "")
+      case "exit" => (Vector(), "")
       case path =>
         try {
           (loadSudoku(chosenFilePath), chosenFilePath)
@@ -59,8 +61,13 @@ object UserInteractions {
             )
             userInteractionLoadSudoku()
           }
+          case _: IllegalArgumentException => {
+            println(
+              "Invalid file content. Your file does not contain a sudoku grid as described in the README.md file."
+            )
+            userInteractionLoadSudoku()
+          }
           case e: Throwable => {
-            println(e)
             println("An unexpected Error occurred. Please try again.")
             userInteractionLoadSudoku()
           }

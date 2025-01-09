@@ -13,6 +13,7 @@ import sudoku.SudokuContextual.sudokuExtensions
 def demonstration(): Unit = {
 
   val (sudoku, chosenFilePath) = userInteractionLoadSudoku()
+  if (sudoku == Vector() && chosenFilePath == "") return
   println(s"Sudoku loaded:\n${sudoku.asString}\n")
   if (!sudoku.isCorrect) {
     println("Sudoku has logical errors. Please try a different one.")
