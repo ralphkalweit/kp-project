@@ -92,6 +92,8 @@ When saving a sudoku, it gets linted: This means spaces can be added between the
 The most important parts of the Scala 3 code have also been implemented in Golang (Go). This allows for a comparison of the functional programming capabilities of Scala 3 and Go.\
 The best way to understand the code is to read it and try it out! The tests should be very informative, too.
 
+The Go program is not interactive like scala, so I recommend to take an ever closer look at the code and tests instead. 
+
 All code regarding sudoku is in `go/sudoku`, the workflow is in `go/cmd` and there is a `go/util` package with a few Higher-Order Functions.
 
 ### Setup your environment
