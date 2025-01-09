@@ -105,5 +105,5 @@ I recommend to use Goland from IntelliJ. If you don't want that, you can run the
 
 ## Sources
 Backtracking Sudoku inspiration:
-https://phabe.ch/2021/02/05/a-sudoku-solver-in-a-few-lines-of-code-or-the-power-of-recursive-programming/
-https://stackoverflow.com/questions/71236966/sudoku-solver-using-recursion-and-backtracking
+- https://phabe.ch/2021/02/05/a-sudoku-solver-in-a-few-lines-of-code-or-the-power-of-recursive-programming/
+- https://stackoverflow.com/questions/71236966/sudoku-solver-using-recursion-and-backtracking
