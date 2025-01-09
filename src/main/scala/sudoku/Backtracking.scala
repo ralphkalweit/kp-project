@@ -9,7 +9,7 @@ import sudoku.SolverHelper.{
 }
 import sudoku.SudokuTypes.{SudokuEliminationMatrix, SudokuLogicalGrid}
 import sudoku.SudokuValidation.{hasLogicalErrors, isCompleteSudoku}
-
+import sudoku.SudokuContextual.sudokuExtensions
 import scala.annotation.tailrec
 
 object Backtracking {
@@ -19,16 +19,15 @@ object Backtracking {
   ): List[SudokuLogicalGrid] = {
     (1 to grid.length).flatMap { candidate =>
       val newGrid = insertAtFirstBlank(grid, candidate)
-      if (!hasLogicalErrors(newGrid)) Some(newGrid)
+      if (newGrid.isCorrect) Some(newGrid)
       else None
     }.toList
   }
 
   @tailrec
   def backtrackingWithoutElimination(
-      pendingCandidates: List[SudokuLogicalGrid],
-      useDFS: Boolean = true
-  ): Option[SudokuLogicalGrid] = {
+      pendingCandidates: List[SudokuLogicalGrid]
+  )(using useDFS: Boolean): Option[SudokuLogicalGrid] = {
     pendingCandidates match {
       case currentGrid :: rest =>
         if (isCompleteSudoku(currentGrid)) {
@@ -51,16 +50,15 @@ object Backtracking {
   @tailrec
   def backtrackingWithElimination(
       pendingCandidates: List[SudokuLogicalGrid],
-      useDFS: Boolean = true
-  ): Option[SudokuLogicalGrid] = {
+  )(using useDFS: Boolean): Option[SudokuLogicalGrid] = {
     pendingCandidates match {
       case Nil => None
       case currentGrid :: rest =>
-        val possibilities = getEliminationMatrix(currentGrid)
+        val possibilities = currentGrid.toEliminationMatrix
         val eliminated = eliminateRecursive(possibilities)
 
         if (hasContradiction(eliminated)) {
-          backtrackingWithElimination(rest, useDFS)
+          backtrackingWithElimination(rest)
         } else {
           if (eliminationMatrixIsSolved(eliminated)) {
             Some(getSudokuFromEliminationMatrix(eliminated))
@@ -71,7 +69,7 @@ object Backtracking {
             val newFrontier =
               if (useDFS) nextStates ::: rest else rest ::: nextStates
 
-            backtrackingWithElimination(newFrontier, useDFS)
+            backtrackingWithElimination(newFrontier)
           }
         }
     }

@@ -1,6 +1,7 @@
 package sudoku
 
 import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuLogicalList}
+import sudoku.SudokuContextual.sudokuExtensions
 
 object SudokuValidation {
 
@@ -47,9 +48,9 @@ object SudokuValidation {
   def hasLogicalErrors(grid: SudokuLogicalGrid): Boolean = {
     val regions =
       Vector(
-        getSudokuRows(grid),
-        getSudokuColumns(grid),
-        getSudokuBlocks(grid)
+        grid.getRows,
+        grid.getColumns,
+        grid.getBlocks
       ).flatten
 
     !regions.forall(list => {
@@ -58,19 +59,17 @@ object SudokuValidation {
     })
   }
 
-  def isCompleteSudoku(grid: SudokuLogicalGrid): Boolean = {
-    if (grid.isEmpty) false
+  def isCompleteSudoku(sudoku: SudokuLogicalGrid): Boolean = {
+    if (sudoku.isEmpty) false
     else {
       val noMissing =
         Vector(
-          getSudokuRows(grid),
-          getSudokuColumns(grid),
-          getSudokuBlocks(
-            grid
-          )
+          sudoku.getRows,
+          sudoku.getColumns,
+          sudoku.getBlocks
         ).flatten.forall(isCompleteVector)
 
-      noMissing && !hasLogicalErrors(grid)
+      noMissing && sudoku.isCorrect
     }
   }
 

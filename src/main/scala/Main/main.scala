@@ -3,6 +3,7 @@ package Main
 import sudoku.Strategies.{StrategyFunctionType, trySolveUsingBacktrackingWithElimination, trySolveUsingBacktrackingWithoutElimination, trySolveWithElimination}
 import sudoku.SudokuIO.{getString, userInteractionLoadSudoku, userInteractionSaveSudoku}
 import sudoku.SudokuValidation.isCompleteSudoku
+import sudoku.SudokuContextual.sudokuExtensions
 
 @main def main(): Unit = {
   println("Starting demonstration!")
@@ -13,12 +14,13 @@ def demonstration(): Unit = {
 
   val (sudoku, chosenFilePath) = userInteractionLoadSudoku()
 
-  println(s"Sudoku loaded:\n${getString(sudoku)}\n")
+  println(s"Sudoku loaded:\n${sudoku.asString}\n")
 
   if (isCompleteSudoku(sudoku)) {
     println("The Sudoku is already solved.")
     userInteractionSaveSudoku(chosenFilePath, sudoku)
   } else {
+    given useDFS: Boolean = true
 
     // TODO allow user to choose different strategies here
     val strategies: Map[String, StrategyFunctionType] = Map(
@@ -39,7 +41,7 @@ def demonstration(): Unit = {
         "Could not find a complete solution with this strategy. Please try a different strategy next time."
       )
     }
-    println(getString(hopefullySolved))
+    println(hopefullySolved.asString)
     userInteractionSaveSudoku(chosenFilePath, hopefullySolved)
 
   }

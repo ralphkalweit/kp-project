@@ -1,8 +1,9 @@
-import sudoku.SolverHelper.{eliminateListFromAllSingles, eliminateOneStep, eliminateRecursive, eliminationMatrixIsSolved, getEliminationMatrix, getSudokuFromEliminationMatrix, insertAtFirstBlank, isPartialSolution}
+import sudoku.SolverHelper.{eliminateListFromAllSingles, eliminateOneStep, eliminateRecursive, eliminationMatrixIsSolved, getSudokuFromEliminationMatrix, insertAtFirstBlank, isPartialSolution}
 import sudoku.SudokuIO.{areEqual, getLogicalGrid, getString, saveSudoku}
 import sudoku.SudokuValidation.{getSudokuBlocks, getSudokuFromSudokuBlocks, hasLogicalErrors, isCompleteVector, isCompleteSudoku}
 import org.scalatest.funsuite.AnyFunSuite
 import sudoku.Strategies.trySolveWithElimination
+import sudoku. SudokuContextual.sudokuExtensions
 
 import scala.::
 
@@ -14,7 +15,7 @@ class SolverHelperTest extends AnyFunSuite {
     val expectedWithInserted = s"1 2 3 4\n3 $insertElem _ 2\n2 1 4 3\n4 3 2 1"
 
     val grid = getLogicalGrid(sudokuString)
-    val withInserted = getString(insertAtFirstBlank(grid, insertElem))
+    val withInserted = insertAtFirstBlank(grid, insertElem).asString
 
     assert(withInserted == expectedWithInserted)
   }
@@ -23,7 +24,7 @@ class SolverHelperTest extends AnyFunSuite {
     val str = "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
     val exp = "4 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
 
-    val act = getString(insertAtFirstBlank(getLogicalGrid(str), 4))
+    val act = insertAtFirstBlank(getLogicalGrid(str), 4).asString
 
     assert(exp == act)
   }
@@ -32,7 +33,7 @@ class SolverHelperTest extends AnyFunSuite {
     val str = "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
     val exp = "80 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
 
-    val act = getString(insertAtFirstBlank(getLogicalGrid(str), 80))
+    val act = insertAtFirstBlank(getLogicalGrid(str), 80).asString
     // TODO maybe expect an error here
     assert(exp != act)
   }
@@ -45,7 +46,7 @@ class SolverHelperTest extends AnyFunSuite {
       "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
     ).foreach { str =>
       val grid = getLogicalGrid(str)
-      val eliminationMatrix = getEliminationMatrix(grid)
+      val eliminationMatrix = grid.toEliminationMatrix
       val actual = getSudokuFromEliminationMatrix(eliminationMatrix)
       assert(areEqual(grid, actual))
     }
@@ -61,7 +62,7 @@ class SolverHelperTest extends AnyFunSuite {
       "1 2 3 4 5 6 7 8 9\n4 5 6 7 8 9 1 2 3\n7 8 9 1 2 3 4 5 6\n2 3 4 5 6 7 8 9 1\n5 6 7 8 9 1 2 3 4\n8 9 1 2 3 4 5 6 7\n3 4 5 6 7 8 9 1 2\n6 7 8 9 1 2 3 4 5\n9 1 2 3 4 5 6 7 8"
     ).foreach { str =>
       val grid = getLogicalGrid(str)
-      val blocks = getSudokuBlocks(grid)
+      val blocks = grid.getBlocks
       val actual = getSudokuFromSudokuBlocks(blocks)
 
       assert(areEqual(grid, actual))
@@ -98,7 +99,7 @@ class SolverHelperTest extends AnyFunSuite {
   test("eliminate one step") {
     val smallSudoku = "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
     val expectedSolution = "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
-    val possibilities = getEliminationMatrix(getLogicalGrid(smallSudoku))
+    val possibilities = getLogicalGrid(smallSudoku).toEliminationMatrix
     val eliminatedOnce = eliminateOneStep(possibilities)
     assert(eliminationMatrixIsSolved(eliminatedOnce))
     //
@@ -112,7 +113,7 @@ class SolverHelperTest extends AnyFunSuite {
       "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1" -> "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
     )
     sudokuMap.foreach { case (inputSudoku, expectedSolution) =>
-      val poss = getEliminationMatrix(getLogicalGrid(inputSudoku))
+      val poss = getLogicalGrid(inputSudoku).toEliminationMatrix
       val eliminatedResult = eliminateRecursive(poss)
       assert(eliminationMatrixIsSolved(eliminatedResult))
 
@@ -125,14 +126,14 @@ class SolverHelperTest extends AnyFunSuite {
   }
 
   test("partial Solution 4x4") {
-    assert(isPartialSolution(Vector(), Vector()))
+    assert(Vector().isPartialSolutionOf(Vector()))
     val x4_empty = "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
     val sudokuList = x4_empty :: List("_ 2 _ 4\n_ 4 _ 2\n2 1 4 3\n4 3 2 1", "1 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
 
     sudokuList.foreach(str =>
       val grid = getLogicalGrid(str)
-      assert(isPartialSolution(grid, grid))
-      assert(isPartialSolution(getLogicalGrid(x4_empty), grid))
+      assert(grid.isPartialSolutionOf(grid))
+      assert(getLogicalGrid(x4_empty).isPartialSolutionOf(grid))
     )
   }
 
@@ -141,10 +142,9 @@ class SolverHelperTest extends AnyFunSuite {
     val grid = getLogicalGrid(str)
 
     val attempt = trySolveWithElimination(grid)
-    assert(isPartialSolution(grid, grid))
 
     assert(attempt == grid)
-    assert(isPartialSolution(attempt, grid))
+    assert(attempt.isPartialSolutionOf(grid))
 
   }
 
@@ -156,10 +156,10 @@ class SolverHelperTest extends AnyFunSuite {
     val eliminated = trySolveWithElimination(grid)
     saveSudoku("9x9.sudoku", eliminated)
     //
-    assert(!hasLogicalErrors(eliminated))
-    assert(isCompleteSudoku(eliminated))
+    assert(eliminated.isCorrect)
+    assert(eliminated.isValidAndCompleteComplete)
     //
-    assert(isPartialSolution(grid, eliminated))
+    assert(grid.isPartialSolutionOf(eliminated))
   }
 
 }

@@ -4,9 +4,9 @@ import sudoku.Backtracking.{
   backtrackingWithElimination,
   backtrackingWithoutElimination
 }
+import sudoku.SudokuContextual.sudokuExtensions
 import sudoku.SolverHelper.{
   eliminateRecursive,
-  getEliminationMatrix,
   getSudokuFromEliminationMatrix
 }
 import sudoku.SudokuTypes.SudokuLogicalGrid
@@ -18,7 +18,7 @@ object Strategies {
   def trySolveWithElimination: StrategyFunctionType = (
     sudoku: SudokuLogicalGrid
   ) => {
-    val possibilities = getEliminationMatrix(sudoku)
+    val possibilities = sudoku.toEliminationMatrix
     val finalResult = eliminateRecursive(
       possibilities
     )
@@ -28,23 +28,19 @@ object Strategies {
   private def backtrackingStrategy(
       sudoku: SudokuLogicalGrid,
       useElimination: Boolean,
-      useDFS: Boolean
-  ): SudokuLogicalGrid = {
+  )(using useDFS: Boolean): SudokuLogicalGrid = {
     val finalResult =
-      if (useElimination) backtrackingWithElimination(List(sudoku), useDFS)
-      else backtrackingWithoutElimination(List(sudoku), useDFS)
+      if (useElimination) backtrackingWithElimination(List(sudoku))
+      else backtrackingWithoutElimination(List(sudoku))
 
     finalResult.getOrElse(sudoku)
   }
 
-  def trySolveUsingBacktrackingWithoutElimination: StrategyFunctionType =
-    (sudoku: SudokuLogicalGrid) => {
-      backtrackingStrategy(sudoku, false, true)
-    }
+  def trySolveUsingBacktrackingWithoutElimination(using usDFS: Boolean): StrategyFunctionType =
+    (sudoku: SudokuLogicalGrid) => backtrackingStrategy(sudoku, false)(using usDFS)
 
-  def trySolveUsingBacktrackingWithElimination: StrategyFunctionType =
-    (sudoku: SudokuLogicalGrid) => {
-      backtrackingStrategy(sudoku, true, true)
-    }
+  def trySolveUsingBacktrackingWithElimination(using usDFS: Boolean): StrategyFunctionType =
+    (sudoku: SudokuLogicalGrid) => backtrackingStrategy(sudoku, true)(using usDFS)
+
 
 }

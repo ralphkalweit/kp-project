@@ -1,10 +1,10 @@
 import org.scalatest.funsuite.AnyFunSuite
 import sudoku.LinterStyler.toStringWithLen
+import sudoku. SudokuContextual.sudokuExtensions
 import sudoku.SudokuIO.{
   asIntGrid,
   getCellString,
   getLogicalGrid,
-  getString,
   loadSudoku,
   saveSudoku
 }
@@ -39,7 +39,7 @@ class LinterStylerTest extends AnyFunSuite {
   test("4x4 empty") {
     val str = "_    _    _   1\n_  _  _  _\n_ _ _ 3\n_ _ _ _"
     val grid = getLogicalGrid(str)
-    val newString = getString(grid)
+    val newString = grid.asString
 
     assert(newString != str)
     assert(newString.split(" ").length == 13)
@@ -56,7 +56,7 @@ class LinterStylerTest extends AnyFunSuite {
     }
 
     val grid = loadSudoku(filePath)
-    val newString = getString(grid)
+    val newString = grid.asString
 
     assert(newString.split(" ").length > sudoku16.split(" ").length)
     assert(
@@ -75,9 +75,8 @@ class LinterStylerTest extends AnyFunSuite {
     val expectedSpaces = " " * (size.toString.length - 1)
 
     val gridString =
-      getString(
-        getLogicalGrid(List.fill(size)(" " + "_ " * size).mkString("\n"))
-      )
+        getLogicalGrid(List.fill(size)(" " + "_ " * size).mkString("\n")).asString
+      
 
     gridString.split('\n').foreach { row =>
       assert(row.startsWith(s"${expectedSpaces}_"))

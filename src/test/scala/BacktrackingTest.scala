@@ -5,32 +5,40 @@ import sudoku.Backtracking.{
 import sudoku.SudokuIO.{getLogicalGrid, getString}
 import org.scalatest.funsuite.AnyFunSuite
 import sudoku.SolverHelper.isPartialSolution
+import sudoku.SudokuTypes.SudokuLogicalGrid
+import sudoku. SudokuContextual.sudokuExtensions
 
 class BacktrackingTest extends AnyFunSuite {
 
-  private val strategies =
-    Vector(backtrackingWithElimination, backtrackingWithoutElimination)
+  private val strategies
+      : List[SudokuLogicalGrid => Option[SudokuLogicalGrid]] =
+    List(
+      grid => backtrackingWithElimination(List(grid))(using true),
+      grid => backtrackingWithElimination(List(grid))(using false),
+      grid => backtrackingWithoutElimination(List(grid))(using true),
+      grid => backtrackingWithoutElimination(List(grid))(using false)
+    )
 
   private val dfsOptions = Set(true, false)
 
   test("Solvable 4x4") {
     strategies.foreach { strategy =>
-      val sudokuString = "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
-      val expectedSolution = "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
-      val grid = getLogicalGrid(sudokuString)
+      dfsOptions.foreach { dfs =>
+        val sudokuString = "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
+        val expectedSolution = "1 2 3 4\n3 4 1 2\n2 1 4 3\n4 3 2 1"
+        val grid = getLogicalGrid(sudokuString)
 
-      val solution = strategy(List(grid), true)
-      val solutionBFS = strategy(List(grid), true)
+        val solution = strategy(grid)
 
-      assert(getString(solution.getOrElse(Vector())) == expectedSolution)
-      assert(getString(solutionBFS.getOrElse(Vector())) == expectedSolution)
+        assert(solution.getOrElse(Vector()).asString == expectedSolution)
+      }
     }
   }
 
   test("Empty") {
-    val f = List(getLogicalGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"))
+    val f = getLogicalGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
     strategies.foreach(strategy =>
-      dfsOptions.foreach(useDFS => assert(strategy(f, useDFS).nonEmpty))
+      dfsOptions.foreach(useDFS => assert(strategy(f).nonEmpty))
     )
   }
 
@@ -42,10 +50,10 @@ class BacktrackingTest extends AnyFunSuite {
 
         val grid = getLogicalGrid(sudokuString)
 
-        val solution = strategy(List(grid), useDFS)
+        val solution = strategy(grid)
         assert(solution.nonEmpty)
 
-        assert(isPartialSolution(grid, solution.get))
+        assert(grid.isPartialSolutionOf(solution.get))
       }
     }
   }
@@ -58,7 +66,7 @@ class BacktrackingTest extends AnyFunSuite {
           getLogicalGrid("1 _ _ _\n_ 2 3 4\n_ _ _ _\n_ _ _ _"),
           getLogicalGrid("1 _ _ _\n_ _ _ 4\n_ _ _ 3\n_ _ _ 2")
         ).foreach { grid =>
-          assert(strategy(List(grid), useDFS).isEmpty)
+          assert(strategy(grid).isEmpty)
         }
       }
     }

@@ -3,7 +3,7 @@ package sudoku
 import sudoku.SudokuIO.areEqual
 import sudoku.SudokuTypes.{SudokuEliminationMatrix, SudokuLogicalGrid}
 import sudoku.SudokuValidation.*
-
+import sudoku.SudokuContextual.sudokuExtensions
 import scala.annotation.tailrec
 
 object SolverHelper {
@@ -49,11 +49,12 @@ object SolverHelper {
       possibilities: SudokuEliminationMatrix
   ): SudokuEliminationMatrix = {
     type T = SudokuEliminationMatrix
-    val transformers = Vector[SudokuEliminationMatrix => SudokuEliminationMatrix](
-      getSudokuRows,
-      getSudokuColumns,
-      getSudokuBlocks
-    )
+    val transformers =
+      Vector[SudokuEliminationMatrix => SudokuEliminationMatrix](
+        getSudokuRows,
+        getSudokuColumns,
+        getSudokuBlocks
+      )
 
     transformers.foldLeft(possibilities) { (current, transform) =>
       transform(
@@ -88,7 +89,7 @@ object SolverHelper {
       possibilities: SudokuEliminationMatrix
   ): Boolean = {
     val sudoku = getSudokuFromEliminationMatrix(possibilities)
-    isCompleteSudoku(sudoku) && !hasLogicalErrors(sudoku)
+    sudoku.isValidAndCompleteComplete
   }
 
   def isPartialSolution(
@@ -97,7 +98,7 @@ object SolverHelper {
   ): Boolean = {
     if (part.isEmpty) return true
     if (part.length != complete.length) return false
-    if (hasLogicalErrors(part)) return false
+    if (!part.isCorrect) return false
 
     part
       .zip(complete)

@@ -9,6 +9,7 @@ import scala.io.Source
 import scala.util.Using
 import scala.io.StdIn
 
+import sudoku.SudokuContextual.sudokuExtensions
 object SudokuIO {
 
   def getFileContent(filePath: String): String = {
@@ -95,7 +96,7 @@ object SudokuIO {
 
   def saveSudoku(filePath: String, sudoku: SudokuLogicalGrid): Unit = {
     val ret = Using(new PrintWriter(filePath)) { writer =>
-      writer.write(getString(sudoku))
+      writer.write(sudoku.asString)
     }
 
     if (ret.isFailure) {

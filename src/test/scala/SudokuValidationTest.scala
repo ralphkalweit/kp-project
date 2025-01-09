@@ -2,13 +2,11 @@ import sudoku.SudokuIO.getLogicalGrid
 import org.scalatest.funsuite.AnyFunSuite
 import sudoku.SudokuTypes.SudokuLogicalGrid
 import sudoku.SudokuValidation.{
-  getSudokuBlocks,
-  getSudokuColumns,
-  getSudokuRows,
   hasLogicalErrors,
   isCompleteVector,
   isCompleteSudoku
 }
+import sudoku.SudokuContextual.sudokuExtensions
 
 class SudokuValidationTest extends AnyFunSuite {
 
@@ -23,10 +21,9 @@ class SudokuValidationTest extends AnyFunSuite {
       Vector(Some(4), Some(3), Some(2), Some(1))
     )
 
-    val rows = getSudokuRows(sudoku)
-    assert(sudoku == rows)
-    assert(expectedCols == getSudokuColumns(sudoku))
-    assert(expectedBlocks == getSudokuBlocks(sudoku))
+    assert(sudoku == sudoku.getRows)
+    assert(expectedCols == sudoku.getColumns)
+    assert(expectedBlocks == sudoku.getBlocks)
   }
 
   test("is complete List") {
