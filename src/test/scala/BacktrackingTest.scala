@@ -9,7 +9,7 @@ import sudoku.SolverHelper.isPartialSolution
 class BacktrackingTest extends AnyFunSuite {
 
   private val strategies =
-    List(backtrackingWithElimination, backtrackingWithoutElimination)
+    Vector(backtrackingWithElimination, backtrackingWithoutElimination)
 
   private val dfsOptions = Set(true, false)
 
@@ -22,8 +22,8 @@ class BacktrackingTest extends AnyFunSuite {
       val solution = strategy(List(grid), true)
       val solutionBFS = strategy(List(grid), true)
 
-      assert(getString(solution.getOrElse(List())) == expectedSolution)
-      assert(getString(solutionBFS.getOrElse(List())) == expectedSolution)
+      assert(getString(solution.getOrElse(Vector())) == expectedSolution)
+      assert(getString(solutionBFS.getOrElse(Vector())) == expectedSolution)
     }
   }
 
@@ -53,7 +53,7 @@ class BacktrackingTest extends AnyFunSuite {
   test("not solvable") {
     strategies.foreach { strategy =>
       dfsOptions.foreach { useDFS =>
-        List(
+        Vector(
           getLogicalGrid("1 _ _ _\n2 _ 3 4\n_ _ _ _\n_ _ _ _"),
           getLogicalGrid("1 _ _ _\n_ 2 3 4\n_ _ _ _\n_ _ _ _"),
           getLogicalGrid("1 _ _ _\n_ _ _ 4\n_ _ _ 3\n_ _ _ 2")

@@ -9,6 +9,6 @@ object CellValidation {
     case "_" => true
     case _ => false
 
-  def listContainsOnlyValidStrings(strings: List[String], maxDim: Int): Boolean = strings.forall(* => isValidString(*, maxDim))
+  def vectorContainsOnlyValidStrings(strings: Vector[String], maxDim: Int): Boolean = strings.forall(* => isValidString(*, maxDim))
 
 }

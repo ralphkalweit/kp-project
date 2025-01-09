@@ -1,6 +1,6 @@
 package sudoku
 
-import sudoku.CellValidation.listContainsOnlyValidStrings
+import sudoku.CellValidation.vectorContainsOnlyValidStrings
 import sudoku.LinterStyler.{getUniformLength, toStringWithLen}
 import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuStringGrid}
 
@@ -32,17 +32,17 @@ object SudokuIO {
     )
 
     val grid: SudokuStringGrid = rows.map { row =>
-      val list = row.split(" ").toList.filter(cell => cell.nonEmpty)
+      val list = row.split(" ").toVector.filter(cell => cell.nonEmpty)
       require(
         list.length == assumedDim,
         s"Width and length of the grid are not equal: ${list.toString()}"
       )
       require(
-        listContainsOnlyValidStrings(list, assumedDim),
+        vectorContainsOnlyValidStrings(list, assumedDim),
         s"Invalid Character Found in row ${list.toString()}"
       )
       list
-    }.toList
+    }.toVector
 
     grid
   }
@@ -85,8 +85,8 @@ object SudokuIO {
   }
 
   def areEqual[T](
-      sudoku1: List[List[T]],
-      sudoku2: List[List[T]]
+      sudoku1: Vector[Vector[T]],
+      sudoku2: Vector[Vector[T]]
   ): Boolean = {
     sudoku1.zip(sudoku2).forall { (row1, row2) =>
       row1.zip(row2).forall(_ == _)
@@ -112,7 +112,7 @@ object SudokuIO {
       getLogicalGrid(str)
     } catch {
       case e: Exception => throw e
-      case _            => List()
+      case _            => Vector()
     }
   }
 

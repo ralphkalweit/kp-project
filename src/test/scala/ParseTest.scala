@@ -1,5 +1,5 @@
 import sudoku.SudokuIO.{asIntGrid, asSudokuStringGrid, getLogicalGrid}
-import sudoku.CellValidation.listContainsOnlyValidStrings
+import sudoku.CellValidation.vectorContainsOnlyValidStrings
 import org.scalatest.funsuite.AnyFunSuite
 
 class ParseTest extends AnyFunSuite {
@@ -45,13 +45,13 @@ class ParseTest extends AnyFunSuite {
   }
 
   test("ContainsOnlyValidStrings ???") {
-    val list = List("1", "2", "_", "4", "5")
-    assert(listContainsOnlyValidStrings(list, 5))
-    assert(listContainsOnlyValidStrings(list, 6))
-    assert(!listContainsOnlyValidStrings(list, 4))
+    val list = Vector("1", "2", "_", "4", "5")
+    assert(vectorContainsOnlyValidStrings(list, 5))
+    assert(vectorContainsOnlyValidStrings(list, 6))
+    assert(!vectorContainsOnlyValidStrings(list, 4))
 
-    val list2 = List("-1")
-    assert(!listContainsOnlyValidStrings(list2, 5))
+    val list2 = Vector("-1")
+    assert(!vectorContainsOnlyValidStrings(list2, 5))
 
     val wrong = "_ a\n2 _"
     assertThrows[RuntimeException](asSudokuStringGrid(wrong))

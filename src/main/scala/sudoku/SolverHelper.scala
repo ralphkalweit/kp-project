@@ -49,7 +49,7 @@ object SolverHelper {
       possibilities: SudokuEliminationMatrix
   ): SudokuEliminationMatrix = {
     type T = SudokuEliminationMatrix
-    val transformers = List[SudokuEliminationMatrix => SudokuEliminationMatrix](
+    val transformers = Vector[SudokuEliminationMatrix => SudokuEliminationMatrix](
       getSudokuRows,
       getSudokuColumns,
       getSudokuBlocks
@@ -71,7 +71,7 @@ object SolverHelper {
     else eliminateRecursive(next)
   }
 
-  def eliminateListFromAllSingles(list: List[Set[Int]]): List[Set[Int]] = {
+  def eliminateListFromAllSingles(list: Vector[Set[Int]]): Vector[Set[Int]] = {
     val singles = list.collect {
       case s if s.size == 1 => s.head
     }.toSet

@@ -6,7 +6,7 @@ import sudoku.SudokuValidation.{
   getSudokuColumns,
   getSudokuRows,
   hasLogicalErrors,
-  isCompleteList,
+  isCompleteVector,
   isCompleteSudoku
 }
 
@@ -16,11 +16,11 @@ class SudokuValidationTest extends AnyFunSuite {
     // TODO this is a good test to compare with the go version
     val sudoku = getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 2 1")
     val expectedCols = sudoku.transpose
-    val expectedBlocks: SudokuLogicalGrid = List(
-      List(Some(1), Some(2), Some(3), Some(4)),
-      List(Some(3), Some(4), Some(1), Some(2)),
-      List(Some(2), Some(1), Some(4), Some(3)),
-      List(Some(4), Some(3), Some(2), Some(1))
+    val expectedBlocks: SudokuLogicalGrid = Vector(
+      Vector(Some(1), Some(2), Some(3), Some(4)),
+      Vector(Some(3), Some(4), Some(1), Some(2)),
+      Vector(Some(2), Some(1), Some(4), Some(3)),
+      Vector(Some(4), Some(3), Some(2), Some(1))
     )
 
     val rows = getSudokuRows(sudoku)
@@ -30,9 +30,9 @@ class SudokuValidationTest extends AnyFunSuite {
   }
 
   test("is complete List") {
-    assert(isCompleteList(List(Some(1), Some(2))))
-    assert(!isCompleteList(List(Some(1), None)))
-    assert(!isCompleteList(List()))
+    assert(isCompleteVector(Vector(Some(1), Some(2))))
+    assert(!isCompleteVector(Vector(Some(1), None)))
+    assert(!isCompleteVector(Vector()))
   }
 
   test("complete sudoku") {
@@ -50,7 +50,7 @@ class SudokuValidationTest extends AnyFunSuite {
       !isCompleteSudoku(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1"))
     )
 
-    assert(!isCompleteSudoku(List()))
+    assert(!isCompleteSudoku(Vector()))
   }
 
   test("Sudoku has errors") {

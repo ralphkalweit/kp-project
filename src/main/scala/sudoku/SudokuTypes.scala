@@ -1,12 +1,12 @@
 package sudoku
 
 object SudokuTypes {
-  type SudokuStringGrid = List[List[String]] // todo refactor to vector for performance
+  type SudokuStringGrid = Vector[Vector[String]]
   //
-  type SudokuLogicalList = List[Option[Int]]
-  type SudokuLogicalGrid = List[SudokuLogicalList]
+  type SudokuLogicalList = Vector[Option[Int]]
+  type SudokuLogicalGrid = Vector[SudokuLogicalList]
   //
   type SudokuEliminationCell = Set[Int]
-  type SudokuEliminationList = List[SudokuEliminationCell]
-  type SudokuEliminationMatrix = List[SudokuEliminationList]
+  type SudokuEliminationList = Vector[SudokuEliminationCell]
+  type SudokuEliminationMatrix = Vector[SudokuEliminationList]
 }

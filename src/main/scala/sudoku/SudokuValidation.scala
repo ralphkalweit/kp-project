@@ -4,19 +4,19 @@ import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuLogicalList}
 
 object SudokuValidation {
 
-  def getSudokuRows[T](grid: List[List[T]]): List[List[T]] = {
+  def getSudokuRows[T](grid: Vector[Vector[T]]): Vector[Vector[T]] = {
     grid
   }
 
   def getSudokuColumns[T](
-      grid: List[List[T]]
-  ): List[List[T]] = {
+      grid: Vector[Vector[T]]
+  ): Vector[Vector[T]] = {
     grid.transpose
   }
 
   def getSudokuBlocks[T](
-      grid: List[List[T]]
-  ): List[List[T]] = {
+      grid: Vector[Vector[T]]
+  ): Vector[Vector[T]] = {
     val size = grid.length
     val boxSize = math.sqrt(size).toInt
     require(
@@ -31,22 +31,22 @@ object SudokuValidation {
       (for {
         row <- rowBlock * boxSize until (rowBlock + 1) * boxSize
         col <- colBlock * boxSize until (colBlock + 1) * boxSize
-      } yield grid(row)(col)).toList
-    }).toList
+      } yield grid(row)(col)).toVector
+    }).toVector
   }
 
   def getSudokuFromSudokuBlocks[T](
-      grid: List[List[T]]
-  ): List[List[T]] =
+      grid: Vector[Vector[T]]
+  ): Vector[Vector[T]] =
     getSudokuBlocks(grid)
 
-  def isCompleteList(list: SudokuLogicalList): Boolean = {
+  def isCompleteVector(list: SudokuLogicalList): Boolean = {
     list.nonEmpty && !list.contains(None)
   }
 
   def hasLogicalErrors(grid: SudokuLogicalGrid): Boolean = {
     val regions =
-      List(
+      Vector(
         getSudokuRows(grid),
         getSudokuColumns(grid),
         getSudokuBlocks(grid)
@@ -62,13 +62,13 @@ object SudokuValidation {
     if (grid.isEmpty) false
     else {
       val noMissing =
-        List(
+        Vector(
           getSudokuRows(grid),
           getSudokuColumns(grid),
           getSudokuBlocks(
             grid
           )
-        ).flatten.forall(isCompleteList)
+        ).flatten.forall(isCompleteVector)
 
       noMissing && !hasLogicalErrors(grid)
     }

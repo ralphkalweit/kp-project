@@ -1,7 +1,14 @@
 package sudoku
 
-import sudoku.Backtracking.{backtrackingWithElimination, backtrackingWithoutElimination}
-import sudoku.SolverHelper.{eliminateRecursive, getEliminationMatrix, getSudokuFromEliminationMatrix}
+import sudoku.Backtracking.{
+  backtrackingWithElimination,
+  backtrackingWithoutElimination
+}
+import sudoku.SolverHelper.{
+  eliminateRecursive,
+  getEliminationMatrix,
+  getSudokuFromEliminationMatrix
+}
 import sudoku.SudokuTypes.SudokuLogicalGrid
 
 object Strategies {

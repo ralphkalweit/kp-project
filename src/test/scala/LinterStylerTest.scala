@@ -17,8 +17,8 @@ class LinterStylerTest extends AnyFunSuite {
 
   test("adjustNumDigits") {
 
-    val cells = List(Some(1), Some(10), None)
-    val kinds = List(3, 5, 1)
+    val cells = Vector(Some(1), Some(10), None)
+    val kinds = Vector(3, 5, 1)
 
     cells.foreach(cell =>
       kinds.foreach(uniLen =>

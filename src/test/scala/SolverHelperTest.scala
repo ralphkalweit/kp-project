@@ -1,6 +1,6 @@
 import sudoku.SolverHelper.{eliminateListFromAllSingles, eliminateOneStep, eliminateRecursive, eliminationMatrixIsSolved, getEliminationMatrix, getSudokuFromEliminationMatrix, insertAtFirstBlank, isPartialSolution}
 import sudoku.SudokuIO.{areEqual, getLogicalGrid, getString, saveSudoku}
-import sudoku.SudokuValidation.{getSudokuBlocks, getSudokuFromSudokuBlocks, hasLogicalErrors, isCompleteList, isCompleteSudoku}
+import sudoku.SudokuValidation.{getSudokuBlocks, getSudokuFromSudokuBlocks, hasLogicalErrors, isCompleteVector, isCompleteSudoku}
 import org.scalatest.funsuite.AnyFunSuite
 import sudoku.Strategies.trySolveWithElimination
 
@@ -39,7 +39,7 @@ class SolverHelperTest extends AnyFunSuite {
 
   test("transform to and from elimination Matrix") {
 
-    List(
+    Vector(
       "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _",
       "4 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _",
       "1 2 3 4\n3 _ _ 2\n2 1 4 3\n4 3 2 1"
@@ -52,7 +52,7 @@ class SolverHelperTest extends AnyFunSuite {
   }
 
   test("inverse block retrieval") {
-    List(
+    Vector(
       "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _",
       "4 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _",
       "4 3 2 1\n_ _ _ _\n_ _ _ _\n_ _ _ _",
@@ -69,20 +69,20 @@ class SolverHelperTest extends AnyFunSuite {
   }
 
   test("eliminateFromAllSingles should handle various cases correctly") {
-    val testCases = List(
-      List(Set(1, 2, 3), Set(1), Set(2, 4), Set(5)) -> List(
+    val testCases = Vector(
+      Vector(Set(1, 2, 3), Set(1), Set(2, 4), Set(5)) -> Vector(
         Set(2, 3),
         Set(1),
         Set(2, 4),
         Set(5)
       ),
-      List(Set(1, 2), Set(3, 4), Set(5, 6)) -> List(
+      Vector(Set(1, 2), Set(3, 4), Set(5, 6)) -> Vector(
         Set(1, 2),
         Set(3, 4),
         Set(5, 6)
       ),
-      List(Set(1), Set(2), Set(3)) -> List(Set(1), Set(2), Set(3)),
-      List(Set(1, 2, 3), Set(1), Set(1, 4), Set(5)) -> List(
+      Vector(Set(1), Set(2), Set(3)) -> Vector(Set(1), Set(2), Set(3)),
+      Vector(Set(1, 2, 3), Set(1), Set(1, 4), Set(5)) -> Vector(
         Set(2, 3),
         Set(1),
         Set(4),
@@ -125,7 +125,7 @@ class SolverHelperTest extends AnyFunSuite {
   }
 
   test("partial Solution 4x4") {
-    assert(isPartialSolution(List(), List()))
+    assert(isPartialSolution(Vector(), Vector()))
     val x4_empty = "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"
     val sudokuList = x4_empty :: List("_ 2 _ 4\n_ 4 _ 2\n2 1 4 3\n4 3 2 1", "1 _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _")
 
