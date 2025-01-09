@@ -1,10 +1,14 @@
 # kp-project
-This repository presents a comparison of the languages Scala 3 and Go, focusing on their functional programming capabilities. 
+This repository presents a comparison of the languages Scala 3 and Go, focusing on their functional programming capabilities.\
 It includes a Sudoku solver for puzzles of any size (n x n), though the emphasis is not on implementing the most efficient solver.
 
 ## Scala
-This project is written in Scala 3 using Functional Programming (FP), with key parts also implemented in Go for comparison (also using FP, see [here](##Golang))
-The best way to understand the code is to read it! The tests should be very informative.
+This project is written in Scala 3 using Functional Programming (FP), with key parts also implemented in Go for comparison (also using FP, see [here](#golang)).\
+The best way to understand the code is to read it and try it out! The tests should be very informative, too.
+
+All code regarding sudoku is in `src/main/scala/sudoku`, the workflow is in `src/main/scala/Main/main`.
+The tests are inside the `src/test` directory.
+
 
 ### Set up your environment
 
@@ -14,8 +18,7 @@ This project is using Scala `3.3.1` and Scalatest version `3.2.17` as described 
 You need to install [sbt](https://www.scala-sbt.org/): `brew install sbt`
 I recommend using IntelliJ IDEA to open the scala project.
 
-All Scala code is inside `./scala`. To continue in the console, please run `cd scala`.
-To run the code, use `sbt run`. To execute all tests, use `sbt test`
+To run the code, use `sbt run`. To execute all tests, use `sbt test`.
 
 ## Structure of the Program
 The intended structure of the program is the following workflow:
@@ -32,10 +35,6 @@ The intended structure of the program is the following workflow:
 ![Sudoku-Workflow.png](Sudoku-Workflow.png)
 
 When saving a sudoku, it gets linted: This means spaces can be added between the cells to make sure they align nicely. This makes a `n x n` sudoku readable, for n > 9, too.
-
-All code regarding sudoku is in the `sudoku` package, the workflow is in package `main` and for go, there is a `utils` package with a few Higher-Order Functions.
-For scala, the tests are inside the `src/test` directory.
-
 ## Sudoku Rules
 
 ### Syntax
@@ -85,8 +84,10 @@ _ _ 3 _
 
 ## Golang
 
-The most important parts of the Scala 3 code have also been implemented in Golang (Go). This allows for a comparison of the functional programming capabilities of Scala 3 and Go.
-The best way to understand the code is to read it! The tests should be very informative.
+The most important parts of the Scala 3 code have also been implemented in Golang (Go). This allows for a comparison of the functional programming capabilities of Scala 3 and Go.\
+The best way to understand the code is to read it and try it out! The tests should be very informative, too.
+
+All code regarding sudoku is in `go/sudoku`, the workflow is in `go/cmd` and there is a `go/util` package with a few Higher-Order Functions.
 
 ### Setup your environment
 Follow the [official instructions](https://go.dev/doc/tutorial/getting-started) to set up a go environment, and you should be good to "go" (e.g. execute code, run tests, debug).
