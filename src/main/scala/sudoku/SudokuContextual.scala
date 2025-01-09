@@ -19,5 +19,4 @@ object SudokuContextual {
       //
       def asString: String = getString(sudoku)
       def toEliminationMatrix: SudokuEliminationMatrix = getEliminationMatrix(sudoku)
-
 }

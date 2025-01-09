@@ -27,10 +27,11 @@ object SudokuIO {
     val rows = fileContent.split('\n')
     val assumedDim = rows.length
     val sqrt = math.sqrt(assumedDim).intValue()
-    require(
-      sqrt * sqrt == assumedDim,
-      s"Expected shape n^2 * n^2 but found $assumedDim * $assumedDim"
-    )
+
+//    require(
+//      sqrt * sqrt == assumedDim,
+//      s"Expected shape n^2 * n^2 but found $assumedDim * $assumedDim"
+//    )
 
     val grid: SudokuStringGrid = rows.map { row =>
       val list = row.split(" ").toVector.filter(cell => cell.nonEmpty)
@@ -114,42 +115,6 @@ object SudokuIO {
     } catch {
       case e: Exception => throw e
       case _            => Vector()
-    }
-  }
-
-  private def getUserInput(prompt: String): String = {
-    println(prompt)
-    StdIn.readLine()
-  }
-
-  def userInteractionSaveSudoku(
-      initialFilePath: String,
-      sudoku: SudokuLogicalGrid
-  ): Unit = {
-    val exit = " or enter :q to quit"
-    val resultFilePath = getUserInput(
-      s"Please type in a path to save the sudoku (leave empty to overwrite the existing file${exit}):"
-    )
-    resultFilePath match {
-      case ":q"   =>
-      case "exit" =>
-      case "!"    => println("You've just found an easter egg. Congrats!")
-      case ""     => saveSudoku(initialFilePath, sudoku)
-      case _      => saveSudoku(resultFilePath, sudoku)
-    }
-  }
-
-  def userInteractionLoadSudoku(
-//      defaultAction: () => SudokuLogicalGrid,
-//      defaultActionStr: String
-  ): (SudokuLogicalGrid, String) = {
-    val chosenFilePath = getUserInput(
-      s"Please type in a relative file path to a sudoku file:" // (${defaultActionStr}):"
-    )
-    // todo try until there was a run without any errors
-    chosenFilePath match {
-//      case ""   => defaultAction()
-      case path => (loadSudoku(chosenFilePath), chosenFilePath)
     }
   }
 }

@@ -18,10 +18,8 @@ class ParseTest extends AnyFunSuite {
     assert(asSudokuStringGrid("_").nonEmpty)
   }
 
-  test("gridify 3x3") {
-    assertThrows[RuntimeException](asSudokuStringGrid("_ _ _\n_ _ _\n_ _ _"))
-    // TODO support any type of sudoku, not just n^2 x n^2
-    // assert(asSudokuStringGrid("_ _ _\n_ _ _\n_ _ _").length == 3)
+  test("3x3") {
+    assert(asSudokuStringGrid("_ _ _\n_ _ _\n_ _ _").length == 3)
   }
 
   test("more spaces, no problems?") {

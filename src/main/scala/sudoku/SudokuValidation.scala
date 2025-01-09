@@ -18,12 +18,11 @@ object SudokuValidation {
   def getSudokuBlocks[T](
       grid: Vector[Vector[T]]
   ): Vector[Vector[T]] = {
-    val size = grid.length
-    val boxSize = math.sqrt(size).toInt
-    require(
-      boxSize * boxSize == size,
-      "Grid must be of shape n^2 x n^2"
-    ) // TODO maybe there is a good definition for some non-squared sudoku with special inner blocks (e.g. 5x2)??
+    val dimension = grid.length
+    val boxSize = math.sqrt(dimension).toInt
+
+    if (boxSize * boxSize != dimension)
+      return grid // don't do blocks when we can't define them
 
     (for {
       rowBlock <- 0 until boxSize

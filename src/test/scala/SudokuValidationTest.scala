@@ -1,11 +1,8 @@
 import sudoku.SudokuIO.getLogicalGrid
 import org.scalatest.funsuite.AnyFunSuite
 import sudoku.SudokuTypes.SudokuLogicalGrid
-import sudoku.SudokuValidation.{
-  hasLogicalErrors,
-  isCompleteVector,
-  isCompleteSudoku
-}
+import sudoku.SudokuValidation.isCompleteVector
+
 import sudoku.SudokuContextual.sudokuExtensions
 
 class SudokuValidationTest extends AnyFunSuite {
@@ -32,51 +29,38 @@ class SudokuValidationTest extends AnyFunSuite {
     assert(!isCompleteVector(Vector()))
   }
 
-  test("complete sudoku") {
-    assert(
-      isCompleteSudoku(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 2 1"))
+  test("sudoku.isValidAndCompleteComplete") {
+    val pairs = Map(
+      "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 2 1" -> true,
+      "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n2 2 2 2" -> false,
+      "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1" -> false,
     )
 
-    // last row is wrong:
-    assert(
-      !isCompleteSudoku(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n2 2 2 2"))
+    pairs.toList.foreach((str, correct) =>
+      val grid = getLogicalGrid(str)
+      assert(grid.isValidAndCompleteComplete == correct)
     )
 
-    // last row has one missing:
-    assert(
-      !isCompleteSudoku(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1"))
-    )
-
-    assert(!isCompleteSudoku(Vector()))
+    assert(!Vector().isValidAndCompleteComplete)
   }
 
-  test("Sudoku has errors") {
-    assert(
-      !hasLogicalErrors(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 2 1"))
-    )
-    assert(
-      hasLogicalErrors(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 3 2"))
-    )
-    assert(
-      !hasLogicalErrors(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1"))
-    )
-    assert(
-      !hasLogicalErrors(getLogicalGrid("1 2 3 4\n 3 4 1 2 \n 2 _ 4 3\n4 _ 2 1"))
-    )
-    assert(
-      hasLogicalErrors(getLogicalGrid("_ _ _ 1\n_ _ _ _\n_ _ _ 1\n_ _ _ _"))
-    )
-    assert(
-      !hasLogicalErrors(getLogicalGrid("_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _"))
+  test("sudoku.isCorrect") {
+    val pairs = Map(
+      "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 2 1" -> true,
+      "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 3 2" -> false,
+      "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1" -> true,
+      "1 2 3 4\n 3 4 1 2 \n 2 _ 4 3\n4 _ 2 1" -> true,
+      "_ _ _ 1\n_ _ _ _\n_ _ _ 1\n_ _ _ _" -> false,
+      "_ _ _ _\n_ _ _ _\n_ _ _ _\n_ _ _ _" -> true,
+      "1 2 3 4 5 6 7 8 9\n4 5 6 7 8 9 1 2 3\n7 8 9 1 2 3 4 5 6\n2 3 4 5 6 7 8 9 1\n5 6 7 8 9 1 2 3 4\n8 9 1 2 3 4 5 6 7\n3 4 5 6 7 8 9 1 2\n6 7 8 9 1 2 3 4 5\n9 1 2 3 4 5 6 7 8" -> true,
+      "1 2 3 4\n3 1 2 _\n2 3 4 1\n _ _ _ _" -> false,
     )
 
-    assert(
-      !hasLogicalErrors(
-        getLogicalGrid(
-          "1 2 3 4 5 6 7 8 9\n4 5 6 7 8 9 1 2 3\n7 8 9 1 2 3 4 5 6\n2 3 4 5 6 7 8 9 1\n5 6 7 8 9 1 2 3 4\n8 9 1 2 3 4 5 6 7\n3 4 5 6 7 8 9 1 2\n6 7 8 9 1 2 3 4 5\n9 1 2 3 4 5 6 7 8"
-        )
-      )
+    pairs.toList.foreach((str, correct) =>
+      val grid = getLogicalGrid(str)
+      assert(grid.isCorrect == correct)
     )
+    assert(Vector().isCorrect)
   }
 
 }

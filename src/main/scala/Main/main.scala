@@ -1,8 +1,8 @@
 package Main
 
+import Main.UserInteractions.{userInteractionChooseFromOptions, userInteractionLoadSudoku, userInteractionSaveSudoku}
 import sudoku.Strategies.{StrategyFunctionType, trySolveUsingBacktrackingWithElimination, trySolveUsingBacktrackingWithoutElimination, trySolveWithElimination}
-import sudoku.SudokuIO.{getString, userInteractionLoadSudoku, userInteractionSaveSudoku}
-import sudoku.SudokuValidation.isCompleteSudoku
+import sudoku.SudokuValidation.{hasLogicalErrors, isCompleteSudoku}
 import sudoku.SudokuContextual.sudokuExtensions
 
 @main def main(): Unit = {
@@ -13,27 +13,35 @@ import sudoku.SudokuContextual.sudokuExtensions
 def demonstration(): Unit = {
 
   val (sudoku, chosenFilePath) = userInteractionLoadSudoku()
-
   println(s"Sudoku loaded:\n${sudoku.asString}\n")
+  if (!sudoku.isCorrect) {
+    println("Sudoku has logical errors. Please try a different one.")
+    demonstration()
+  }
 
-  if (isCompleteSudoku(sudoku)) {
+  if (sudoku.isValidAndCompleteComplete) {
     println("The Sudoku is already solved.")
     userInteractionSaveSudoku(chosenFilePath, sudoku)
   } else {
     given useDFS: Boolean = true
 
-    // TODO allow user to choose different strategies here
     val strategies: Map[String, StrategyFunctionType] = Map(
       "Elimination" -> trySolveWithElimination,
-      "Backtracking Without Elimination" -> trySolveUsingBacktrackingWithoutElimination,
-      "Backtracking With Elimination" -> trySolveUsingBacktrackingWithElimination
+      "Backtracking With Elimination" -> trySolveUsingBacktrackingWithElimination,
+      "Backtracking Without Elimination" -> trySolveUsingBacktrackingWithoutElimination
     )
-    // TODO maybe use contextual abstraction here to provide a solver?
 
-//    val chosenStrategy = "Elimination"
-    val chosenStrategy = "Backtracking With Elimination"
-    println(s"Using $chosenStrategy to solve the sudoku...")
-    val hopefullySolved = strategies(chosenStrategy)(sudoku)
+    val separator = "`\n- `"
+    val prompt = s"Choose a Strategy. Options:\n- `${strategies.keySet.mkString(separator)}`"
+    val chosenStrategy = userInteractionChooseFromOptions[StrategyFunctionType](prompt, strategies)
+    if (chosenStrategy._2.isEmpty) {
+      return
+    }
+
+    println(s"Using ${chosenStrategy._1} to solve the sudoku...")
+    val strategyFunction = chosenStrategy._2.get
+
+    val hopefullySolved = strategyFunction(sudoku)
     if (isCompleteSudoku(hopefullySolved)) {
       println("Found a solution for the sudoku!")
     } else {
