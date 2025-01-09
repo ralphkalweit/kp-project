@@ -1,4 +1,4 @@
-# kp-project
+# kp-project: Sudoku parser and solver
 This repository presents a comparison of the languages Scala 3 and Go, focusing on their functional programming capabilities.\
 It includes a Sudoku solver for puzzles of any size (n x n), though the emphasis is not on implementing the most efficient solver.
 
