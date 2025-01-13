@@ -53,6 +53,10 @@ class ParseTest extends AnyFunSuite {
 
     val wrong = "_ a\n2 _"
     assertThrows[RuntimeException](asSudokuStringGrid(wrong))
+
+    val zero = Vector("0")
+    assert(!vectorContainsOnlyValidStrings(zero, 4))
+
   }
 
   test("to int grid") {

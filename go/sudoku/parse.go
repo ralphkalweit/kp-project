@@ -42,7 +42,7 @@ func parseSudokuString(input string) (StringGrid, error) {
 
 func isValidCell(cell string, maxNumber int) bool {
 	if num, err := strconv.Atoi(cell); err == nil {
-		return num <= maxNumber
+		return num <= maxNumber && num > 0
 	}
 	return cell == "_"
 }
