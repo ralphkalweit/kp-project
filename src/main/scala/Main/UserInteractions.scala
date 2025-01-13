@@ -26,10 +26,10 @@ object UserInteractions {
       s"Please type in a path to save the sudoku.\nYou can press enter to overwrite the existing file,\ntype in `${restartOption}` to load a new file or enter `:q` to quit:"
     )
     resultFilePath match {
-      case ":q"              =>
-      case "exit"            =>
-      case s"$restartOption" => demonstration()
-      case ""                => saveSudoku(initialFilePath, sudoku)
+      case ":q"            =>
+      case "exit"          =>
+      case `restartOption` => demonstration()
+      case ""              => saveSudoku(initialFilePath, sudoku)
       case any =>
         try {
           saveSudoku(any, sudoku)
