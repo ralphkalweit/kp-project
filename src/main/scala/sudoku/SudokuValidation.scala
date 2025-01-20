@@ -1,6 +1,6 @@
 package sudoku
 
-import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuLogicalList}
+import sudoku.SudokuTypes.{SudokuLogicalGrid, SudokuLogicalVector}
 import sudoku.SudokuContextual.sudokuExtensions
 
 object SudokuValidation {
@@ -40,8 +40,8 @@ object SudokuValidation {
   ): Vector[Vector[T]] =
     getSudokuBlocks(grid)
 
-  def isCompleteVector(list: SudokuLogicalList): Boolean = {
-    list.nonEmpty && !list.contains(None)
+  def isCompleteVector(vector: SudokuLogicalVector): Boolean = {
+    vector.nonEmpty && !vector.contains(None)
   }
 
   def hasLogicalErrors(grid: SudokuLogicalGrid): Boolean = {

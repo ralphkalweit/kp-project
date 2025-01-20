@@ -58,7 +58,7 @@ object SolverHelper {
 
     transformers.foldLeft(possibilities) { (current, transform) =>
       transform(
-        transform(current).map(eliminateListFromAllSingles)
+        transform(current).map(eliminateFromAllSingles)
       )
     }
   }
@@ -72,7 +72,7 @@ object SolverHelper {
     else eliminateRecursive(next)
   }
 
-  def eliminateListFromAllSingles(list: Vector[Set[Int]]): Vector[Set[Int]] = {
+  def eliminateFromAllSingles(list: Vector[Set[Int]]): Vector[Set[Int]] = {
     val singles = list.collect {
       case s if s.size == 1 => s.head
     }.toSet

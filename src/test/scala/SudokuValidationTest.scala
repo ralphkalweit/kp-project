@@ -29,16 +29,16 @@ class SudokuValidationTest extends AnyFunSuite {
     assert(!isCompleteVector(Vector()))
   }
 
-  test("sudoku.isValidAndCompleteComplete") {
+  test(".isValidAndComplete") {
     val pairs = Map(
       "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 3 2 1" -> true,
       "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n2 2 2 2" -> false,
       "1 2 3 4\n 3 4 1 2 \n 2 1 4 3\n4 _ 2 1" -> false,
     )
 
-    pairs.toList.foreach((str, correct) =>
+    pairs.toList.foreach((str, bool) =>
       val grid = getLogicalGrid(str)
-      assert(grid.isValidAndCompleteComplete == correct)
+      assert(grid.isValidAndCompleteComplete == bool)
     )
 
     assert(!Vector().isValidAndCompleteComplete)

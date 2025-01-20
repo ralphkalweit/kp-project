@@ -1,4 +1,4 @@
-import sudoku.SolverHelper.{eliminateListFromAllSingles, eliminateOneStep, eliminateRecursive, eliminationMatrixIsSolved, getSudokuFromEliminationMatrix, insertAtFirstBlank, isPartialSolution}
+import sudoku.SolverHelper.{eliminateFromAllSingles, eliminateOneStep, eliminateRecursive, eliminationMatrixIsSolved, getSudokuFromEliminationMatrix, insertAtFirstBlank, isPartialSolution}
 import sudoku.SudokuIO.{areEqual, getLogicalGrid, getString, saveSudoku}
 import sudoku.SudokuValidation.{getSudokuBlocks, getSudokuFromSudokuBlocks, hasLogicalErrors, isCompleteVector, isCompleteSudoku}
 import org.scalatest.funsuite.AnyFunSuite
@@ -92,7 +92,7 @@ class SolverHelperTest extends AnyFunSuite {
     )
 
     testCases.foreach { case (input, expectedOutput) =>
-      assert(eliminateListFromAllSingles(input) == expectedOutput)
+      assert(eliminateFromAllSingles(input) == expectedOutput)
     }
   }
 
